@@ -1,4 +1,4 @@
-## Boilerplate RTK & saga
+## Admin Side for AJ Homes Website
 
 ## Requirements
 
@@ -7,9 +7,9 @@
 
 ### Setup Instructions:
 
-`git clone git@github.com:beethovkjfe/boilerplate-rtk-saga.git`
+`git clone`
 
-`cd boilerplate-rtk-saga`
+`cd `
 
 `npm install --legacy-peer-deps`
 
@@ -39,8 +39,4 @@ For using API's, follow the given instructions.
 
 ### Issue Tracker
 
-### Coding styles
 
-- Keep it simple and readable with type definitions.
-- Write unit tests as much as possible.
-- Follow the rule of linting. You can't do committing with messy codes.
