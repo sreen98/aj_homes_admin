@@ -9,3 +9,7 @@ import { LoadingIndicator } from 'components';
 export const PropertyManagement = loadable(() => import('./index'), {
   fallback: <LoadingIndicator visible />
 });
+
+export const PropertyCreateManagement = loadable(() => import('./index-create'), {
+  fallback: <LoadingIndicator visible />
+});

@@ -33,6 +33,7 @@ const AppManagement = (props: any) => {
     if (isUserAuthenticated) {
       dispatch(Actions.fetchUser());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUserAuthenticated]);
 
   const theme = useMemo(
@@ -42,6 +43,7 @@ const AppManagement = (props: any) => {
         ...rest,
         direction: currentLocale === 'en' ? 'ltr' : 'rtl'
       }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [mode, currentLocale, defaultTheme]
   );
 

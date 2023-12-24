@@ -1,4 +1,9 @@
-export default {
+const messages = {
   heading: 'Properties',
-  subHeading: 'List of all properties'
+  button: 'Add Property',
+  new: {
+    heading: 'Add a Property'
+  }
 };
+
+export default messages;
