@@ -1,11 +1,9 @@
 import ReactDOM from 'react-dom/client';
-import { I18nextProvider } from 'react-i18next';
 import { CssBaseline } from '@mui/material';
 import { Provider } from 'react-redux';
 import React from 'react';
 import { ConnectedRouter } from 'connected-react-router';
 import { withRouter } from 'react-router-dom';
-import i18next from 'config/i18n';
 import { store } from 'store/store';
 import { history } from 'utils';
 
@@ -33,12 +31,10 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <I18nextProvider i18n={i18next}>
-        <CssBaseline />
-        <ScrollToTopHandler>
-          <AppManagement />
-        </ScrollToTopHandler>
-      </I18nextProvider>
+      <CssBaseline />
+      <ScrollToTopHandler>
+        <AppManagement />
+      </ScrollToTopHandler>
     </ConnectedRouter>
   </Provider>
 );

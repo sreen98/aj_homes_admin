@@ -7,9 +7,8 @@ import * as Actions from './slice';
 
 export function* loginUser(): SagaIterator {
   try {
-    console.log('🚀 ~ file: saga.ts:9 ~ function*loginUser ~ loginUser: saga');
     yield call(setCookie, 'isAdminLoggedIn', 'true');
-    yield call(localRedirect, '/dashboard');
+    yield call(localRedirect, '/properties');
     yield put(Actions.loginSuccess());
   } catch (error) {
     yield put(Actions.loginFailed(error));

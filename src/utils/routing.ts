@@ -8,3 +8,7 @@ export const localRedirect = (path: string, params?: RedirectOption) => {
     search: params?.search || ''
   });
 };
+
+export const goBack = () => {
+  history.goBack();
+};

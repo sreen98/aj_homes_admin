@@ -91,14 +91,12 @@ export default function Layout({ children }: { children: any }) {
         <List component="nav">
           {mainList.map(item => {
             return (
-              <>
-                <ListItemButton onClick={() => onClickDrawerItem(item.id)}>
-                  <ListItemIcon>
-                    <DrawerIcon icon={item.id} />
-                  </ListItemIcon>
-                  <ListItemText primary={item.name} />
-                </ListItemButton>
-              </>
+              <ListItemButton onClick={() => onClickDrawerItem(item.id)} key={item.id}>
+                <ListItemIcon>
+                  <DrawerIcon icon={item.id} />
+                </ListItemIcon>
+                <ListItemText primary={item.name} />
+              </ListItemButton>
             );
           })}
           <Divider sx={{ my: 1 }} />
@@ -111,7 +109,7 @@ export default function Layout({ children }: { children: any }) {
           backgroundColor: theme =>
             theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
           flexGrow: 1,
-          overflow: 'auto'
+          overflowX: 'hidden'
         }}
       >
         <Toolbar />
