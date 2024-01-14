@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { AuthManagementState } from './types';
+import { AuthManagementState, ILoginPayload } from './types';
 
 export const initialState: AuthManagementState = {
   loading: false,
@@ -11,31 +11,32 @@ const authSlice = createSlice({
   name: 'authManagement',
   initialState,
   reducers: {
-    login: state => {
+    loginUser: (state, action: PayloadAction<ILoginPayload>) => {
       state.loading = true;
       state.error = '';
     },
-    loginSuccess: state => {
+    loginUserSuccess: state => {
       state.loading = false;
     },
-    loginFailed: (state, action) => {
+    loginUserFailed: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
-    logout: state => {
+    logoutUser: state => {
       state.loading = true;
       state.error = '';
     },
-    logoutSuccess: state => {
+    logoutUserSuccess: state => {
       state.loading = false;
     },
-    logoutFailed: (state, action) => {
+    logoutUserFailed: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     }
   }
 });
 
-export const { login, loginSuccess, loginFailed, logout, logoutSuccess, logoutFailed } = authSlice.actions;
+export const { loginUser, loginUserSuccess, loginUserFailed, logoutUser, logoutUserSuccess, logoutUserFailed } =
+  authSlice.actions;
 
 export default authSlice.reducer;

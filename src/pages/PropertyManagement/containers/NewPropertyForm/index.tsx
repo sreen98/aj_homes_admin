@@ -1,23 +1,25 @@
 import { useEffect, useState } from 'react';
-import { Grid, Card, CardHeader, CardContent, Divider, Checkbox, FormControlLabel } from '@mui/material';
+import { Grid, Card, CardHeader, CardContent, Divider, Button, CardActionArea, CardActions } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import messages from './messages';
 import { IState } from './types';
-import { payableOptions, statusOptions } from 'config';
+import { contractOptions, payableOptions, statusOptions } from 'config';
+import { createProperty } from 'pages/PropertyManagement/slice';
+import { useDispatch } from 'react-redux';
 
 const initialState = {
   title: '',
-  description: '',
   reference: '',
   postcode: '',
+  description: '',
   area: 0,
   floor: 0,
   bathroom: 0,
   bedroom: 0,
   tenure: '',
-  furnished: false,
+  furnishingType: '',
   lettingType: '',
   minTerm: '',
   contractLength: '',
@@ -25,20 +27,21 @@ const initialState = {
   price: '',
   payable: '',
   type: '',
-  status: ''
+  status: '',
+  ytLink: ''
 };
 
 const loadState = {
   title: 'ABCD',
-  description: 'adajndqwdjhqwoidq',
   reference: 'dqwdwqdqwd',
   postcode: '678912',
+  description: 'adajndqwdjhqwoidq',
   area: 10,
   floor: 20,
   bathroom: 30,
   bedroom: 40,
   tenure: 'Fixed',
-  furnished: false,
+  furnishingType: 'furnished',
   lettingType: 'sfsgfsafd',
   minTerm: 'ssdsdfds',
   contractLength: 'fgawgwr',
@@ -46,14 +49,35 @@ const loadState = {
   price: '12331232',
   payable: 'weekly',
   type: 'adads',
-  status: 'available'
+  status: 'available',
+  ytLink: 'ahdsiaduhiqh'
 };
 
 function NewPropertyForm() {
   const [state, setState] = useState<IState>(initialState);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, id: 'payable' | 'status') => {
+  const dispatch = useDispatch();
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, id: 'payable' | 'status' | 'furnishingType') => {
     setState({ ...state, [id]: event.target.value });
+  };
+
+  const handleValidation = () => {
+    const requiredFields = ['title', 'postcode', 'description', 'price', 'payable', 'status'];
+    let isPass = true;
+    requiredFields.forEach(item => {
+      if (state[item] === '') {
+        isPass = false;
+      }
+    });
+    return isPass;
+  };
+  const handleSubmit = () => {
+    console.log('state.values', state);
+    const isValidForm = handleValidation();
+    console.log('🚀 ~ handleSubmit ~ isValidForm:', isValidForm);
+
+    if (isValidForm) {
+      dispatch(createProperty(state));
+    }
   };
   //load values if edit
   // useEffect(() => {
@@ -62,6 +86,7 @@ function NewPropertyForm() {
 
   return (
     <Grid container direction="row" justifyContent="center" alignItems="stretch" spacing={3}>
+      {/* Basic Info */}
       <Grid item xs={12}>
         <Card>
           <CardHeader title={messages.basicInfo.title} />
@@ -84,17 +109,16 @@ function NewPropertyForm() {
                 onChange={e => setState({ ...state, title: e.target.value })}
               />
               <TextField
-                required
                 id="outlined-required"
                 label={messages.basicInfo.label.reference}
-                value={state.title}
+                value={state.reference}
                 onChange={e => setState({ ...state, reference: e.target.value })}
               />
               <TextField
                 required
                 id="outlined-required"
                 label={messages.basicInfo.label.postcode}
-                value={state.title}
+                value={state.postcode}
                 onChange={e => setState({ ...state, postcode: e.target.value })}
               />
               <TextField
@@ -110,7 +134,7 @@ function NewPropertyForm() {
           </CardContent>
         </Card>
       </Grid>
-
+      {/* Property Info */}
       <Grid item xs={12}>
         <Card>
           <CardHeader title={messages.propInfo.title} />
@@ -126,7 +150,6 @@ function NewPropertyForm() {
               autoComplete="off"
             >
               <TextField
-                required
                 type="number"
                 id="outlined-required"
                 label={messages.propInfo.label.area}
@@ -134,7 +157,6 @@ function NewPropertyForm() {
                 onChange={e => setState({ ...state, area: Number(e.target.value) })}
               />
               <TextField
-                required
                 id="outlined-required"
                 type="number"
                 label={messages.propInfo.label.floor}
@@ -142,7 +164,6 @@ function NewPropertyForm() {
                 onChange={e => setState({ ...state, floor: Number(e.target.value) })}
               />
               <TextField
-                required
                 id="outlined-required"
                 type="number"
                 label={messages.propInfo.label.bathroom}
@@ -150,7 +171,6 @@ function NewPropertyForm() {
                 onChange={e => setState({ ...state, bathroom: Number(e.target.value) })}
               />
               <TextField
-                required
                 id="outlined-required"
                 type="number"
                 label={messages.propInfo.label.bedroom}
@@ -158,7 +178,6 @@ function NewPropertyForm() {
                 onChange={e => setState({ ...state, bedroom: Number(e.target.value) })}
               />
               <TextField
-                required
                 id="outlined-required"
                 label={messages.propInfo.label.tenure}
                 value={state.tenure}
@@ -168,7 +187,7 @@ function NewPropertyForm() {
           </CardContent>
         </Card>
       </Grid>
-
+      {/* Contract Info */}
       <Grid item xs={12}>
         <Card>
           <CardHeader title={messages.contractInfo.title} />
@@ -184,47 +203,47 @@ function NewPropertyForm() {
               autoComplete="off"
             >
               <TextField
-                required
+                id="outlined-select-payable"
+                select
+                label={messages.contractInfo.label.furnishingType}
+                value={state.furnishingType}
+                onChange={e => handleChange(e as React.ChangeEvent<HTMLInputElement>, 'furnishingType')}
+              >
+                {contractOptions.map(option => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <TextField
                 id="outlined-required"
                 label={messages.contractInfo.label.lettingType}
                 value={state.lettingType}
                 onChange={e => setState({ ...state, lettingType: e.target.value })}
               />
               <TextField
-                required
                 id="outlined-required"
                 label={messages.contractInfo.label.minTerm}
                 value={state.minTerm}
-                onChange={e => setState({ ...state, lettingType: e.target.value })}
+                onChange={e => setState({ ...state, minTerm: e.target.value })}
               />
               <TextField
-                required
                 id="outlined-required"
                 label={messages.contractInfo.label.contractLength}
                 value={state.contractLength}
                 onChange={e => setState({ ...state, contractLength: e.target.value })}
               />
               <TextField
-                required
                 id="outlined-required"
                 label={messages.contractInfo.label.deposit}
                 value={state.deposit}
                 onChange={e => setState({ ...state, deposit: e.target.value })}
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    value={state.furnished}
-                    onChange={e => setState({ ...state, furnished: !state.furnished })}
-                  />
-                }
-                label={messages.contractInfo.label.furnished}
-              />
             </Box>
           </CardContent>
         </Card>
       </Grid>
-
+      {/* More Details */}
       <Grid item xs={12}>
         <Card>
           <CardHeader title={messages.moreDetails.title} />
@@ -247,13 +266,6 @@ function NewPropertyForm() {
                 onChange={e => setState({ ...state, price: e.target.value })}
               />
               <TextField
-                required
-                id="outlined-required"
-                label={messages.moreDetails.label.payable}
-                value={state.minTerm}
-                onChange={e => setState({ ...state, payable: e.target.value })}
-              />
-              <TextField
                 id="outlined-select-payable"
                 required
                 select
@@ -268,7 +280,6 @@ function NewPropertyForm() {
                 ))}
               </TextField>
               <TextField
-                required
                 id="outlined-required"
                 label={messages.moreDetails.label.type}
                 value={state.type}
@@ -288,9 +299,27 @@ function NewPropertyForm() {
                   </MenuItem>
                 ))}
               </TextField>
+              <TextField
+                id="outlined-required"
+                label={messages.moreDetails.label.ytLink}
+                value={state.ytLink}
+                onChange={e => setState({ ...state, ytLink: e.target.value })}
+              />
             </Box>
           </CardContent>
         </Card>
+      </Grid>
+
+      <Grid item xs={2}>
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          color="primary"
+          size="small"
+          // startIcon={<AddIcon fontSize="small" />}
+        >
+          {messages.button.submit}
+        </Button>
       </Grid>
     </Grid>
   );

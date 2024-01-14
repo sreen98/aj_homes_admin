@@ -1,6 +1,7 @@
 const messages = {
   edit: 'Edit',
-  details: 'Details'
+  details: 'Details',
+  updateStatus: 'Update Status'
 };
 
 export default messages;

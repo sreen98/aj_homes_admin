@@ -21,7 +21,7 @@ const messages = {
   contractInfo: {
     title: 'Contract Info',
     label: {
-      furnished: 'Furnished',
+      furnishingType: 'Furnishing Type',
       lettingType: 'Letting Type',
       minTerm: 'Minimum Term',
       contractLength: 'Contract Length',
@@ -30,10 +30,19 @@ const messages = {
   },
   moreDetails: {
     title: 'More Details',
-    label: { price: 'Price', payable: 'Payable', type: 'Property Type', status: 'Property Status' },
+    label: {
+      price: 'Price in Pounds',
+      payable: 'Payable',
+      type: 'Property Type',
+      status: 'Property Status',
+      ytLink: 'Youtube Link'
+    },
     helperText: {
       status: 'Please select  status'
     }
+  },
+  button: {
+    submit: 'Submit'
   }
 };
 

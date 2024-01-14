@@ -7,7 +7,9 @@ export const initialState: AppManagementState = {
   mode: 'light',
   loading: false,
   error: '',
-  userData: {}
+  userData: {},
+  showStatus: false,
+  status: { message: '', type: 'success' }
 };
 
 const localeSlice = createSlice({
@@ -31,10 +33,26 @@ const localeSlice = createSlice({
     fetchUserFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    },
+    showStatusMessage: (state, action) => {
+      state.showStatus = true;
+      state.status = action.payload;
+    },
+    closeStatusMessage: state => {
+      state.showStatus = false;
+      state.status = { message: '', type: 'success' };
     }
   }
 });
 
-export const { setCurrentLocale, setThemeMode, fetchUser, fetchUserSuccess, fetchUserFailure } = localeSlice.actions;
+export const {
+  setCurrentLocale,
+  setThemeMode,
+  fetchUser,
+  fetchUserSuccess,
+  fetchUserFailure,
+  showStatusMessage,
+  closeStatusMessage
+} = localeSlice.actions;
 
 export default localeSlice.reducer;
