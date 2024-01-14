@@ -8,7 +8,8 @@ import Icon from './Icon';
 import Copyright from './CopyRight';
 import AppBar from './AppBar';
 import Drawer from './Drawer';
-import { Alert } from './Alert';
+import Alert from './Alert';
+import UpdateStatusModal from './UpdateStatusModal';
 export {
   LoadingIndicator,
   MultiSelect,
@@ -20,5 +21,6 @@ export {
   Copyright,
   AppBar,
   Drawer,
-  Alert
+  Alert,
+  UpdateStatusModal
 };
