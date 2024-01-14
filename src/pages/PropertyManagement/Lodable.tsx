@@ -10,6 +10,10 @@ export const PropertyManagement = loadable(() => import('./index'), {
   fallback: <LoadingIndicator visible />
 });
 
+export const PropertyViewManagement = loadable(() => import('./index-view'), {
+  fallback: <LoadingIndicator visible />
+});
+
 export const PropertyCreateManagement = loadable(() => import('./index-create'), {
   fallback: <LoadingIndicator visible />
 });

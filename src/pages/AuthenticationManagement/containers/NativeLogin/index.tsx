@@ -3,15 +3,13 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Copyright } from 'components';
 import { useDispatch } from 'react-redux';
-import { login } from 'pages/AuthenticationManagement/slice';
+import { loginUser } from 'pages/AuthenticationManagement/slice';
 import messages from './messages';
 
 export default function NativeLogin() {
@@ -20,11 +18,9 @@ export default function NativeLogin() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password')
-    });
-    dispatch(login());
+    dispatch(
+      loginUser({ email: (data.get('email') as string) ?? '', password: (data.get('password') as string) ?? '' })
+    );
   };
 
   return (
@@ -68,13 +64,13 @@ export default function NativeLogin() {
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             {messages.signIn}
           </Button>
-          <Grid container>
+          {/* <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
                 {messages.forgotPassword}
               </Link>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Box>
       </Box>
       <Copyright sx={{ mt: 8, mb: 4 }} />

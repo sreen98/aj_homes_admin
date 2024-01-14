@@ -8,3 +8,7 @@ export interface AuthManagementState {
   loading: boolean;
   error: string;
 }
+export interface ILoginPayload {
+  email: string;
+  password: string;
+}

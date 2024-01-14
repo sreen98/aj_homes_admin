@@ -1,14 +1,14 @@
 export interface IState {
   title: string;
-  description: string;
   reference: string;
   postcode: string;
+  description: string;
   area: number;
   floor: number;
   bathroom: number;
   bedroom: number;
   tenure: string;
-  furnished: boolean;
+  furnishingType: string;
   lettingType: string;
   minTerm: string;
   contractLength: string;
@@ -17,4 +17,6 @@ export interface IState {
   payable: string;
   type: string;
   status: string;
+  ytLink: string;
+  [key: string]: string | number;
 }

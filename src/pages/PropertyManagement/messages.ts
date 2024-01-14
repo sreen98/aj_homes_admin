@@ -3,6 +3,9 @@ const messages = {
   button: 'Add Property',
   new: {
     heading: 'Add a Property'
+  },
+  view: {
+    heading: 'Title '
   }
 };
 

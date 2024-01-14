@@ -1,11 +1,31 @@
 export const statusOptions = [
   {
+    value: 'availableImmediately',
+    label: 'Available Immediately'
+  },
+  {
     value: 'available',
     label: 'Available'
   },
   {
-    value: 'rentedOut',
-    label: 'Rented Out'
+    value: 'letAgreed',
+    label: 'Let - Agreed'
+  },
+  {
+    value: 'letUnavailable',
+    label: 'Let - Unavailable'
+  },
+  {
+    value: 'sold',
+    label: 'Sold'
+  },
+  {
+    value: 'soldSTC)',
+    label: 'Sold -  Subject To Contract (STC)'
+  },
+  {
+    value: 'shortTermLet',
+    label: 'Short Term Let'
   },
   {
     value: 'archive',
@@ -25,5 +45,33 @@ export const payableOptions = [
   {
     value: 'yearly',
     label: 'Yearly'
+  }
+];
+
+export const contractOptions = [
+  {
+    value: 'furnished',
+    label: 'Furnished'
+  },
+  {
+    value: 'unFurnished',
+    label: 'Un-Furnished'
+  }
+];
+
+export const mainList: {
+  [key: string]: string;
+}[] = [
+  {
+    id: 'properties',
+    name: 'Properties'
+  },
+  {
+    id: 'enquiries',
+    name: 'Enquiries'
+  },
+  {
+    id: 'myAccount',
+    name: 'My Account'
   }
 ];
