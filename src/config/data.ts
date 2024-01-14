@@ -75,3 +75,27 @@ export const mainList: {
     name: 'My Account'
   }
 ];
+
+export const PropertyInitialState = {
+  _id: '',
+  title: '',
+  image: '',
+  reference: '',
+  postcode: '',
+  description: '',
+  area: 0,
+  floor: 0,
+  bathroom: 0,
+  bedroom: 0,
+  tenure: '',
+  furnishingType: '',
+  lettingType: '',
+  minTerm: '',
+  contractLength: '',
+  deposit: '',
+  price: '',
+  payable: '',
+  type: '',
+  status: '',
+  ytLink: ''
+};

@@ -61,13 +61,14 @@ export interface ICreatePropertyPayload {
 export interface IProperty {
   _id: string;
   title: string;
+  image?: string;
   reference: string;
   postcode: string;
   description: string;
-  area: 176;
-  floor: 3;
-  bathroom: 5;
-  bedroom: 0;
+  area: number;
+  floor: number;
+  bathroom: number;
+  bedroom: number;
   tenure: string;
   furnishingType: string;
   lettingType: string;

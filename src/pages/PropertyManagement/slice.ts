@@ -38,7 +38,7 @@ const propertySlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    updateStatus: (state, action: PayloadAction<{ status: string }>) => {
+    updateStatus: (state, action: PayloadAction<{ id: string; status: string }>) => {
       state.loading = true;
       state.error = '';
     },

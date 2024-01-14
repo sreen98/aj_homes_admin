@@ -30,7 +30,6 @@ export function* getPropertyDetails(data: RequestSagaParams) {
 export function* createProperty(data: RequestSagaParams) {
   try {
     const response: ResponseGenerator = yield call(Endpoints.createProperty, data.payload);
-    console.log('🚀 ~ function*createProperty ~ data.payload):', data.payload);
     yield call(localRedirect, '/properties');
     yield put(Actions.createPropertySuccess(response.data.data));
     yield call(statusHandlerSaga, { message: 'Successfully added property!' });
@@ -39,10 +38,23 @@ export function* createProperty(data: RequestSagaParams) {
   }
 }
 
+export function* updateStatus(data: RequestSagaParams) {
+  try {
+    const response: ResponseGenerator = yield call(Endpoints.updateStatus, data.payload);
+    console.log('🚀 ~ function*createProperty ~ data.payload):', data.payload);
+    yield put(Actions.getAllProperties());
+    yield put(Actions.updateStatusSuccess(response.data.data));
+    yield call(statusHandlerSaga, { message: 'Successfully updated the status!' });
+  } catch (error: any) {
+    yield call(errorHandlerSaga, error, Actions.updateStatusFailed);
+  }
+}
+
 export function* propertyManagementWatcherSaga(): SagaIterator {
   yield all([yield takeLatest(Actions.getAllProperties.type, getAllProperties)]);
   yield all([yield takeLatest(Actions.getPropertyDetails.type, getPropertyDetails)]);
   yield all([yield takeLatest(Actions.createProperty.type, createProperty)]);
+  yield all([yield takeLatest(Actions.updateStatus.type, updateStatus)]);
 }
 
 export default propertyManagementWatcherSaga;

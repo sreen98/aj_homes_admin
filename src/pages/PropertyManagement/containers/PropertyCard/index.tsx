@@ -6,12 +6,20 @@ import Button from '@mui/material/Button';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import messages from './messages';
-import { IProperty } from 'pages/PropertyManagement/types';
-import { localRedirect } from 'utils';
+import { getStatusLabel, localRedirect } from 'utils';
+import { IPropertyCardProps } from './types';
 
-const PropertyCard = ({ properties }: { properties: IProperty[] }) => {
+const getTitle = ({ title, status }: { title: string; status: string }) => {
+  return getStatusLabel(status) === '' ? `${title}` : `${title} (${getStatusLabel(status)})`;
+};
+
+const PropertyCard = ({ properties, onOpenModal }: IPropertyCardProps) => {
   const handleClickDetails = (id: string) => {
     localRedirect(`/property/${id}`);
+  };
+
+  const handleClickUpdateStatus = (id: string) => {
+    onOpenModal(id);
   };
   return (
     <>
@@ -22,7 +30,7 @@ const PropertyCard = ({ properties }: { properties: IProperty[] }) => {
               <CardMedia sx={{ height: 140 }} image={item.image ?? 'https://placehold.co/600x400'} />
               <CardContent sx={{ maxHeight: 150 }}>
                 <Typography gutterBottom variant="h5" component="div">
-                  {item.title}
+                  {getTitle({ title: item.title, status: item.status })}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {item.description}
@@ -33,7 +41,7 @@ const PropertyCard = ({ properties }: { properties: IProperty[] }) => {
                 <Button size="small" onClick={() => handleClickDetails(item._id)}>
                   {messages.details}
                 </Button>
-                <Button size="small" onClick={() => handleClickDetails(item._id)}>
+                <Button size="small" onClick={() => handleClickUpdateStatus(item._id)}>
                   {messages.updateStatus}
                 </Button>
               </CardActions>
