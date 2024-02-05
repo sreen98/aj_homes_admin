@@ -35,7 +35,6 @@ export default function PropertyManagement() {
     localRedirect('/properties/new');
   };
   const handleStatusUpdate = (status: string) => {
-    console.log('🚀 ~ handleStatusUpdate ~ status:', status);
     dispatch(updateStatus({ id: propId, status }));
   };
   return (

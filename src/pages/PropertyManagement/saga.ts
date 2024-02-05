@@ -17,10 +17,8 @@ export function* getAllProperties(data: RequestSagaParams) {
 }
 
 export function* getPropertyDetails(data: RequestSagaParams) {
-  try {
-    const response: ResponseGenerator = yield call(Endpoints.getPropertyDetails);
-    //TODO redirect to property
-    yield call(localRedirect, '/properties');
+    try {
+    const response: ResponseGenerator = yield call(Endpoints.getPropertyDetails, data.payload);
     yield put(Actions.getPropertyDetailsSuccess(response.data.data));
   } catch (error: any) {
     yield call(errorHandlerSaga, error, Actions.getPropertyDetailsFailed);
@@ -38,15 +36,27 @@ export function* createProperty(data: RequestSagaParams) {
   }
 }
 
+export function* updateProperty(data: RequestSagaParams) {
+  try {
+    console.log('in saga',data.payload)
+    const response: ResponseGenerator = yield call(Endpoints.updateProperty, data.payload);
+    yield call(localRedirect, '/properties');
+    yield put(Actions.updatePropertySuccess(response.data.data));
+    yield call(statusHandlerSaga, { message: 'Successfully added property!' });
+  } catch (error: any) {
+    yield call(errorHandlerSaga, error, Actions.updatePropertyFailed);
+  }
+}
+
 export function* updateStatus(data: RequestSagaParams) {
   try {
     const response: ResponseGenerator = yield call(Endpoints.updateStatus, data.payload);
-    console.log('🚀 ~ function*createProperty ~ data.payload):', data.payload);
+    // console.log('🚀 ~ function*createProperty ~ data.payload):', data.payload);
     yield put(Actions.getAllProperties());
     yield put(Actions.updateStatusSuccess(response.data.data));
     yield call(statusHandlerSaga, { message: 'Successfully updated the status!' });
   } catch (error: any) {
-    yield call(errorHandlerSaga, error, Actions.updateStatusFailed);
+    yield call(errorHandlerSaga, error, Actions.updateStatusFailed);  
   }
 }
 
@@ -54,6 +64,7 @@ export function* propertyManagementWatcherSaga(): SagaIterator {
   yield all([yield takeLatest(Actions.getAllProperties.type, getAllProperties)]);
   yield all([yield takeLatest(Actions.getPropertyDetails.type, getPropertyDetails)]);
   yield all([yield takeLatest(Actions.createProperty.type, createProperty)]);
+  yield all([yield takeLatest(Actions.updateProperty.type, updateProperty)]);
   yield all([yield takeLatest(Actions.updateStatus.type, updateStatus)]);
 }
 
