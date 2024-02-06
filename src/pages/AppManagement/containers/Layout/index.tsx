@@ -23,7 +23,7 @@ import messages from './messages';
 import { logoutUser } from 'pages/AuthenticationManagement/slice';
 
 export default function Layout({ children }: Readonly<{ children: any }>) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const dispatch = useDispatch();
   const toggleDrawer = () => {
     setOpen(!open);

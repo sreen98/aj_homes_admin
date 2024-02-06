@@ -38,6 +38,18 @@ const propertySlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    updateProperty:(state,action: PayloadAction<{ id: string; state: any}> )=>{
+      state.loading = true
+      state.error = '';
+    },
+    updatePropertySuccess:(state,action: PayloadAction<any> )=>{
+      state.loading = false;
+      state.error = '';
+    },
+    updatePropertyFailed:(state,action: PayloadAction<any> )=>{
+      state.loading = false;
+      state.error = action.payload;
+    },
     updateStatus: (state, action: PayloadAction<{ id: string; status: string }>) => {
       state.loading = true;
       state.error = '';
@@ -56,7 +68,7 @@ const propertySlice = createSlice({
     },
     getPropertyDetailsSuccess: (state, action: PayloadAction<IProperty>) => {
       state.loading = false;
-      // state.properties = action.payload;
+      state.property = action.payload;
     },
     getPropertyDetailsFailed: (state, action) => {
       state.loading = false;
@@ -75,6 +87,9 @@ export const {
   createProperty,
   createPropertySuccess,
   createPropertyFailed,
+  updateProperty,
+  updatePropertyFailed,
+  updatePropertySuccess,
   updateStatus,
   updateStatusSuccess,
   updateStatusFailed

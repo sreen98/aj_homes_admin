@@ -20,7 +20,6 @@ export default function UpdateStatusModal({ onClose, open, property, onSubmit }:
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
     const status = formJson.status;
-    console.log(status);
     onSubmit(status.toString());
     onClose();
   };

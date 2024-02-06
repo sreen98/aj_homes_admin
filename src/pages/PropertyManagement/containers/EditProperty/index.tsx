@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, Card, CardHeader, CardContent, Divider, Button, CardActionArea, CardActions } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -6,8 +6,11 @@ import MenuItem from '@mui/material/MenuItem';
 import messages from './messages';
 import { IState } from './types';
 import { contractOptions, payableOptions, statusOptions } from 'config';
-import { createProperty } from 'pages/PropertyManagement/slice';
-import { useDispatch } from 'react-redux';
+import { updateProperty ,getPropertyDetails} from 'pages/PropertyManagement/slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import * as Selectors from '../../selectors';
+
 
 const initialState = {
   title: '',
@@ -31,29 +34,14 @@ const initialState = {
   ytLink: ''
 };
 
-const loadState = {
-  title: 'ABCD',
-  reference: 'dqwdwqdqwd',
-  postcode: '678912',
-  description: 'adajndqwdjhqwoidq',
-  area: 10,
-  floor: 20,
-  bathroom: 30,
-  bedroom: 40,
-  tenure: 'Fixed',
-  furnishingType: 'furnished',
-  lettingType: 'sfsgfsafd',
-  minTerm: 'ssdsdfds',
-  contractLength: 'fgawgwr',
-  deposit: '13211233',
-  price: '12331232',
-  payable: 'weekly',
-  type: 'adads',
-  status: 'available',
-  ytLink: 'ahdsiaduhiqh'
-};
+const stateSelector = createStructuredSelector({
+  property: Selectors.makeSelectPropertyData()
+});
 
-function NewPropertyForm() {
+function EditPropertyForm({propId}: any) {
+  console.log(propId,'propId')
+  const { property }: any = useSelector(stateSelector);
+
   const [state, setState] = useState<IState>(initialState);
   const dispatch = useDispatch();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, id: 'payable' | 'status' | 'furnishingType') => {
@@ -71,18 +59,43 @@ function NewPropertyForm() {
     return isPass;
   };
   const handleSubmit = () => {
-    // console.log('state.values', state);
     const isValidForm = handleValidation();
-    // console.log('🚀 ~ handleSubmit ~ isValidForm:', isValidForm);
-
     if (isValidForm) {
-      dispatch(createProperty(state));
+      dispatch(updateProperty({id: propId, state}));
     }
   };
-  //load values if edit
-  // useEffect(() => {
-  //   setState(loadState);
-  // }, []);
+
+  useEffect(() => {
+    dispatch(getPropertyDetails(propId));
+  }, [propId]);
+
+  useEffect(() => {
+    console.log('inside useffect')
+      const propertyData = property
+      console.log(propertyData,'propdata')
+
+      setState({
+        title: propertyData.title,
+        reference: propertyData.reference,
+        postcode: propertyData.postcode,
+        description: propertyData.description,
+        area: propertyData.area,
+        floor: propertyData.floor,
+        bathroom: propertyData.bathroom,
+        bedroom: propertyData.bedroom,
+        tenure: propertyData.tenure,
+        furnishingType: propertyData.furnishingType,
+        lettingType: propertyData.lettingType,
+        minTerm: propertyData.minTerm,
+        contractLength: propertyData.contractLength,
+        deposit: propertyData.deposit,
+        price: propertyData.price,
+        payable: propertyData.payable,
+        type: propertyData.type,
+        status: propertyData.status,
+        ytLink: propertyData.ytLink,
+      });
+  }, [property]);
 
   return (
     <Grid container direction="row" justifyContent="center" alignItems="stretch" spacing={3}>
@@ -325,4 +338,4 @@ function NewPropertyForm() {
   );
 }
 
-export default NewPropertyForm;
+export default EditPropertyForm;
