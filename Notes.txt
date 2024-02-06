@@ -11,13 +11,11 @@ Admin Pending Task UI
 
 Adarsh
 
-1. View Property page - Done
-2. Height Issue in all properties page - Done
-3. Link details in all property page to individual property - Done
-4. API Integration for property - Done
-5. Add map section 
-6. Add field input image
-7. Add checkbox to mark which image as cover image, Cover image should come in getallproperties and individual property api should give all the images uploaded.
+1. Use Add Propperty form for edit also
+2. Modularise index-details and index-view
+3. Add map section 
+4. Add field input image
+5. Add checkbox to mark which image as cover image, Cover image should come in getallproperties and individual property api should give all the images uploaded.
 
-Sreenath 
-1. Direct status change option from All Properties  page
+
+
