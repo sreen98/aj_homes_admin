@@ -28,7 +28,8 @@ const initialState = {
   payable: '',
   type: '',
   status: '',
-  ytLink: ''
+  ytLink: '',
+  mapLink: ''
 };
 
 const loadState = {
@@ -304,6 +305,12 @@ function NewPropertyForm() {
                 label={messages.moreDetails.label.ytLink}
                 value={state.ytLink}
                 onChange={e => setState({ ...state, ytLink: e.target.value })}
+              />
+               <TextField
+                id="outlined-required"
+                label={messages.moreDetails.label.mapLink}
+                value={state.mapLink}
+                onChange={e => setState({ ...state, mapLink: e.target.value })}
               />
             </Box>
           </CardContent>

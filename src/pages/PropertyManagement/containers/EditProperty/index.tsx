@@ -31,7 +31,8 @@ const initialState = {
   payable: '',
   type: '',
   status: '',
-  ytLink: ''
+  ytLink: '',
+  mapLink: ''
 };
 
 const stateSelector = createStructuredSelector({
@@ -94,6 +95,7 @@ function EditPropertyForm({propId}: any) {
         type: propertyData.type,
         status: propertyData.status,
         ytLink: propertyData.ytLink,
+        mapLink: propertyData.mapLink
       });
   }, [property]);
 
@@ -317,6 +319,12 @@ function EditPropertyForm({propId}: any) {
                 label={messages.moreDetails.label.ytLink}
                 value={state.ytLink}
                 onChange={e => setState({ ...state, ytLink: e.target.value })}
+              />
+              <TextField
+                id="outlined-required"
+                label={messages.moreDetails.label.mapLink}
+                value={state.mapLink}
+                onChange={e => setState({ ...state, mapLink: e.target.value })}
               />
             </Box>
           </CardContent>
