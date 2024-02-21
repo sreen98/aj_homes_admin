@@ -27,4 +27,5 @@ export interface IProperty {
   type: string;
   status: string;
   ytLink: string;
+  mapLink: string;
 }

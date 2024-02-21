@@ -97,5 +97,6 @@ export const PropertyInitialState = {
   payable: '',
   type: '',
   status: '',
-  ytLink: ''
+  ytLink: '',
+  mapLink: ''
 };

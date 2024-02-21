@@ -35,7 +35,8 @@ const messages = {
       payable: 'Payable',
       type: 'Property Type',
       status: 'Property Status',
-      ytLink: 'Youtube Link'
+      ytLink: 'Youtube Link',
+      mapLink: 'Map Link'
     },
     helperText: {
       status: 'Please select  status'
