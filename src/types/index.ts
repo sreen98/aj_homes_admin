@@ -81,3 +81,8 @@ export interface IProperty {
   status: string;
   ytLink: string;
 }
+
+export interface ITableHeader {
+  name: string;
+  align: 'center' | 'left' | 'right' | 'inherit' | 'justify' | undefined;
+}

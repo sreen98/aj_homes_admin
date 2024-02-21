@@ -6,6 +6,7 @@ import { createReduxHistoryContext } from 'redux-first-history';
 import appReducer from 'pages/AppManagement/slice';
 import authReducer from 'pages/AuthenticationManagement/slice';
 import propertyReducer from 'pages/PropertyManagement/slice';
+import enquiryReducer from 'pages/EnquiryManagement/slice';
 
 const { createReduxHistory, routerMiddleware, routerReducer } = createReduxHistoryContext({
   history: createBrowserHistory(),
@@ -17,7 +18,8 @@ export const rootReducer = combineReducers({
   router: routerReducer,
   appManagement: appReducer,
   authManagement: authReducer,
-  propertyManagement: propertyReducer
+  propertyManagement: propertyReducer,
+  enquiryManagement: enquiryReducer
 });
 
 export { routerMiddleware, createReduxHistory };

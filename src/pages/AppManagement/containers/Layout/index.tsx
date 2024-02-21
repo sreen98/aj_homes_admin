@@ -23,7 +23,7 @@ import messages from './messages';
 import { logoutUser } from 'pages/AuthenticationManagement/slice';
 
 export default function Layout({ children }: Readonly<{ children: any }>) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
   const toggleDrawer = () => {
     setOpen(!open);
@@ -109,7 +109,8 @@ export default function Layout({ children }: Readonly<{ children: any }>) {
           backgroundColor: theme =>
             theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
           flexGrow: 1,
-          overflowX: 'hidden'
+          overflowX: 'hidden',
+          minHeight: '100vh'
         }}
       >
         <Toolbar />
