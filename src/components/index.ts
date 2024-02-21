@@ -10,6 +10,7 @@ import AppBar from './AppBar';
 import Drawer from './Drawer';
 import Alert from './Alert';
 import UpdateStatusModal from './UpdateStatusModal';
+import EnquiryViewModal from './EnquiryViewModal';
 export {
   LoadingIndicator,
   MultiSelect,
@@ -22,5 +23,6 @@ export {
   AppBar,
   Drawer,
   Alert,
-  UpdateStatusModal
+  UpdateStatusModal,
+  EnquiryViewModal
 };

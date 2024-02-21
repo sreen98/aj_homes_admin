@@ -4,7 +4,8 @@ import {
   PropertyCreateManagement,
   PropertyManagement,
   PropertyViewManagement,
-  PropertyEditManagement
+  PropertyEditManagement,
+  EnquiryManagement
 } from 'pages';
 
 export const pageRoutes = {
@@ -13,7 +14,8 @@ export const pageRoutes = {
     { component: PropertyManagement, path: '/properties' },
     { component: PropertyViewManagement, path: '/property/:propId' },
     { component: PropertyCreateManagement, path: '/properties/new' },
-    { component: PropertyEditManagement, path: '/properties/edit/:propId' }
+    { component: PropertyEditManagement, path: '/properties/edit/:propId' },
+    { component: EnquiryManagement, path: '/enquiries' }
   ],
   public: [
     { path: '/', component: AuthenticationManagement, section: 'login' },
