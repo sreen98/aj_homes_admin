@@ -8,7 +8,7 @@ import { RequestSagaParams, ResponseGenerator } from 'types';
 
 export function* getAllEnquiries(data: RequestSagaParams) {
   try {
-    const response: ResponseGenerator = yield call(Endpoints.getAllEnquiries);
+    const response: ResponseGenerator = yield call(Endpoints.getAllEnquiries, data.payload);
     yield put(Actions.getAllEnquiriesSuccess(response.data.data));
   } catch (error: any) {
     yield call(errorHandlerSaga, error, Actions.getAllEnquiriesFailed);

@@ -30,16 +30,13 @@ export default function PropertyManagement() {
   }, []);
 
   const handleFilterChange = (status: string) => {
-    console.log('🚀 ~ handleStatusChange ~ status:', status);
-    dispatch(getAllEnquiries({}));
+    dispatch(getAllEnquiries(status === 'contacted' ? true : false));
   };
   const handleStatusChange = (status: string) => {
-    console.log('🚀 ~ handleStatusChange ~ status:', status);
-    dispatch(getAllEnquiries({}));
+    // console.log('🚀 ~ handleStatusChange ~ status:', status);
+    // dispatch(getAllEnquiries({}));
   };
   const handleTableAction = (type: 'update' | 'view', id: string) => {
-    console.log('🚀 ~ handleIconClick ~ id:', id);
-    console.log('🚀 ~ handleIconClick ~ type:', type);
     setShowModal(true);
   };
   return (

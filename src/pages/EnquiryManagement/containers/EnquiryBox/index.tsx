@@ -29,6 +29,8 @@ import { EnquiryTableProps, IEnquireStatus } from './types';
 import { IEnquiry } from 'pages/EnquiryManagement/types';
 import { filterOptions, mockEnquiries, tableHeaders } from '../../data';
 import messages from './messages';
+import { updateEnquiryStatus } from 'pages/EnquiryManagement/slice';
+import { useDispatch } from 'react-redux';
 
 const getTableHeaders = () => {
   return tableHeaders.map(header => <TableCell align={header.align}>{header.name}</TableCell>);
@@ -36,11 +38,11 @@ const getTableHeaders = () => {
 
 const getStatusLabel = (status: IEnquireStatus): JSX.Element => {
   const map = {
-    contacted: {
+    notContacted: {
       text: 'Not Contacted',
       color: 'error'
     },
-    notContacted: {
+    contacted: {
       text: 'Contacted',
       color: 'success'
     }
@@ -51,7 +53,7 @@ const getStatusLabel = (status: IEnquireStatus): JSX.Element => {
   return <Chip color={color} label={text} variant="outlined" sx={{ minWidth: '150px' }}></Chip>;
 };
 
-const getTableBody = (enquiry: IEnquiry, theme: any, onIconClick: (type: 'update' | 'view', id: string) => void) => {
+const getTableBody = (enquiry: IEnquiry, theme: any, onIconClick: (type: 'update' | 'view', id: string) => void, handleMarkAsRead: any) => {
   return (
     <TableRow hover key={enquiry.id}>
       <TableCell>
@@ -94,7 +96,7 @@ const getTableBody = (enquiry: IEnquiry, theme: any, onIconClick: (type: 'update
             }}
             color="inherit"
             size="small"
-            onClick={() => onIconClick('update', enquiry.id)}
+            onClick={() => handleMarkAsRead(enquiry.id)}
             disabled={enquiry.status !== 'contacted'}
           >
             <DoneOutlinedIcon fontSize="small" />
@@ -112,52 +114,20 @@ const applyPagination = (cryptoOrders: IEnquiry[], page: number, limit: number):
 const EnquiryTable: FC<EnquiryTableProps> = ({ enquiries, onFilterChange, onAction }) => {
   const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>([]);
   const selectedBulkActions = selectedCryptoOrders.length > 0;
+
+  const dispatch = useDispatch()
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const [status, setStatus] = useState<string>('');
-
-  // const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
-  //   let value = null;
-
-  //   if (e.target.value !== 'all') {
-  //     value = e.target.value;
-  //   }
-
-  //   setFilters(prevFilters => ({
-  //     ...prevFilters,
-  //     status: value
-  //   }));
-  // };
-
-  // const handleSelectAllCryptoOrders = (event: ChangeEvent<HTMLInputElement>): void => {
-  //   setSelectedCryptoOrders(event.target.checked ? cryptoOrders.map(enquiry => enquiry.id) : []);
-  // };
-
-  // const handleSelectOneCryptoOrder = (event: ChangeEvent<HTMLInputElement>, cryptoOrderId: string): void => {
-  //   if (!selectedCryptoOrders.includes(cryptoOrderId)) {
-  //     setSelectedCryptoOrders(prevSelected => [...prevSelected, cryptoOrderId]);
-  //   } else {
-  //     setSelectedCryptoOrders(prevSelected => prevSelected.filter(id => id !== cryptoOrderId));
-  //   }
-  // };
-
-  // const handlePageChange = (event: any, newPage: number): void => {
-  //   setPage(newPage);
-  // };
-
-  // const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-  //   setLimit(parseInt(event.target.value));
-  // };
-
-  // const filteredCryptoOrders = applyFilters(cryptoOrders, filters);
-  // const paginatedCryptoOrders = applyPagination(filteredCryptoOrders, page, limit);
-  // const selectedSomeCryptoOrders = selectedCryptoOrders.length > 0 && selectedCryptoOrders.length < cryptoOrders.length;
-  // const selectedAllCryptoOrders = selectedCryptoOrders.length === cryptoOrders.length;
 
   const handleStatusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStatus(event.target.value);
     onFilterChange(event.target.value);
   };
+
+  const handleMarkAsRead =(id: any) =>{
+    dispatch(updateEnquiryStatus(id as any))
+  }
   const theme = useTheme();
 
   const handleIconClick = (type: 'update' | 'view', id: string) => {
@@ -197,7 +167,7 @@ const EnquiryTable: FC<EnquiryTableProps> = ({ enquiries, onFilterChange, onActi
           <TableHead>
             <TableRow>{getTableHeaders()}</TableRow>
           </TableHead>
-          <TableBody>{enquiries.map(enquiry => getTableBody(enquiry, theme, handleIconClick))}</TableBody>
+          <TableBody>{enquiries.map(enquiry => getTableBody(enquiry, theme, handleIconClick, handleMarkAsRead))}</TableBody>
         </Table>
       </TableContainer>
       <Box p={2}>

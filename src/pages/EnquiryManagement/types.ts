@@ -7,6 +7,7 @@ export interface EnquiryManagementState {
 }
 
 export interface IEnquiry {
+  _id?: string; // Need to reconfirm
   id: string;
   name: string;
   emailId: string;

@@ -1,9 +1,9 @@
 import request from 'config/apiConfig';
 
-export const getAllEnquiries = () => {
-  return request.get('/enquiry');
+export const getAllEnquiries = (data?: any) => {
+  return request.get('/enquiry',{ params: {data}});
 };
 
 export const updateEnquiryStatus = (data: any) => {
-  return request.put(`/properties/${data.id}/status`, { status: data.status });
+  return request.put(`/enquiry/${data}`, { params: { enquiryId: data} });
 };
