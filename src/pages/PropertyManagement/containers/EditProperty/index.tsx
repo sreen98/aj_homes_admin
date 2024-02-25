@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Card, CardHeader, CardContent, Divider, Button, CardActionArea, CardActions } from '@mui/material';
+import { Grid, Card, CardHeader, CardContent, Divider, Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import messages from './messages';
 import { IState } from './types';
 import { contractOptions, payableOptions, statusOptions } from 'config';
-import { updateProperty ,getPropertyDetails} from 'pages/PropertyManagement/slice';
+import { updateProperty, getPropertyDetails } from 'pages/PropertyManagement/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import * as Selectors from '../../selectors';
-
 
 const initialState = {
   title: '',
@@ -39,8 +38,7 @@ const stateSelector = createStructuredSelector({
   property: Selectors.makeSelectPropertyData()
 });
 
-function EditPropertyForm({propId}: any) {
-  console.log(propId,'propId')
+function EditPropertyForm({ propId }: any) {
   const { property }: any = useSelector(stateSelector);
 
   const [state, setState] = useState<IState>(initialState);
@@ -62,41 +60,39 @@ function EditPropertyForm({propId}: any) {
   const handleSubmit = () => {
     const isValidForm = handleValidation();
     if (isValidForm) {
-      dispatch(updateProperty({id: propId, state}));
+      dispatch(updateProperty({ id: propId, state }));
     }
   };
 
   useEffect(() => {
     dispatch(getPropertyDetails(propId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propId]);
 
   useEffect(() => {
-    console.log('inside useffect')
-      const propertyData = property
-      console.log(propertyData,'propdata')
-
-      setState({
-        title: propertyData.title,
-        reference: propertyData.reference,
-        postcode: propertyData.postcode,
-        description: propertyData.description,
-        area: propertyData.area,
-        floor: propertyData.floor,
-        bathroom: propertyData.bathroom,
-        bedroom: propertyData.bedroom,
-        tenure: propertyData.tenure,
-        furnishingType: propertyData.furnishingType,
-        lettingType: propertyData.lettingType,
-        minTerm: propertyData.minTerm,
-        contractLength: propertyData.contractLength,
-        deposit: propertyData.deposit,
-        price: propertyData.price,
-        payable: propertyData.payable,
-        type: propertyData.type,
-        status: propertyData.status,
-        ytLink: propertyData.ytLink,
-        mapLink: propertyData.mapLink
-      });
+    const propertyData = property;
+    setState({
+      title: propertyData.title,
+      reference: propertyData.reference,
+      postcode: propertyData.postcode,
+      description: propertyData.description,
+      area: propertyData.area,
+      floor: propertyData.floor,
+      bathroom: propertyData.bathroom,
+      bedroom: propertyData.bedroom,
+      tenure: propertyData.tenure,
+      furnishingType: propertyData.furnishingType,
+      lettingType: propertyData.lettingType,
+      minTerm: propertyData.minTerm,
+      contractLength: propertyData.contractLength,
+      deposit: propertyData.deposit,
+      price: propertyData.price,
+      payable: propertyData.payable,
+      type: propertyData.type,
+      status: propertyData.status,
+      ytLink: propertyData.ytLink,
+      mapLink: propertyData.mapLink
+    });
   }, [property]);
 
   return (
@@ -332,13 +328,7 @@ function EditPropertyForm({propId}: any) {
       </Grid>
 
       <Grid item xs={2}>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          color="primary"
-          size="small"
-          // startIcon={<AddIcon fontSize="small" />}
-        >
+        <Button onClick={handleSubmit} variant="contained" color="primary" size="small">
           {messages.button.submit}
         </Button>
       </Grid>

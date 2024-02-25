@@ -1,6 +1,6 @@
 export interface AuthManagementProps {
   readonly location?: any;
-  readonly section?: 'login' | 'register';
+  readonly section?: 'login';
   readonly appVersion?: string;
 }
 

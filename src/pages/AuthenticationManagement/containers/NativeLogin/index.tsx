@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { Copyright } from 'components';
 import { useDispatch } from 'react-redux';
 import { loginUser } from 'pages/AuthenticationManagement/slice';
 import messages from './messages';
@@ -73,7 +72,6 @@ export default function NativeLogin() {
           </Grid> */}
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
 }

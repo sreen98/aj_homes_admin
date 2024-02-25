@@ -1,6 +1,6 @@
 const messages = {
   title: 'Admin',
-  companyName: 'AJ Homes'
+  companyName: 'AJ Homes Lettings'
 };
 
 export default messages;

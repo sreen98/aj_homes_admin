@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Grid } from '@mui/material';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Container } from '@mui/material';
 import { createStructuredSelector } from 'reselect';
 
 import PageTitle from 'components/PageTitle';
 import messages from './messages';
 import { EnquiryTable } from './containers';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllEnquiries, updateEnquiryStatus } from './slice';
+import { getAllEnquiries } from './slice';
 import * as Selectors from './selectors';
 import { EnquiryViewModal, LoadingIndicator } from 'components';
-import { IProperty } from 'types';
-import { PropertyInitialState } from 'config';
+import { IEnquiry } from './types';
 
 const stateSelector = createStructuredSelector({
   loading: Selectors.makeSelectEnquiriesLoading(),
@@ -30,39 +29,24 @@ export default function PropertyManagement() {
   }, []);
 
   const handleFilterChange = (status: string) => {
-    dispatch(getAllEnquiries(status === 'contacted' ? true : false));
+    dispatch(getAllEnquiries(status === 'contacted'));
   };
-  const handleStatusChange = (status: string) => {
-    // console.log('🚀 ~ handleStatusChange ~ status:', status);
-    // dispatch(getAllEnquiries({}));
-  };
+
   const handleTableAction = (type: 'update' | 'view', id: string) => {
     setShowModal(true);
+    setEnqId(id);
   };
+
+  const selectedEnquiry = useMemo(() => {
+    return enquiries?.find(item => item.id === enqId) as IEnquiry;
+  }, [enqId, enquiries]);
+
   return (
-    <>
-      <Container maxWidth="xl" sx={{ marginBottom: '2rem' }}>
-        {showModal && (
-          <EnquiryViewModal
-            onClose={() => setShowModal(false)}
-            open={showModal}
-            enquiry={{
-              id: '1',
-              propertyId: '100',
-              name: 'Mildred',
-              emailId: 'ebebin@kowanfu.mo',
-              subject: 'pPoQBZCwVOWRnOnPtPv',
-              status: 'contacted',
-              message:
-                'impossible string frog excitement crop moving diagram cent press living doctor breathing single enter learn path snow rope money particular height radio part wealth'
-            }}
-            onSubmit={handleStatusChange}
-          />
-        )}
-        {loading && <LoadingIndicator visible={loading} />}
-        <PageTitle heading={messages.heading} />
-        <EnquiryTable enquiries={enquiries} onFilterChange={handleFilterChange} onAction={handleTableAction} />
-      </Container>
-    </>
+    <Container maxWidth="xl" sx={{ marginBottom: '2rem' }}>
+      {showModal && <EnquiryViewModal onClose={() => setShowModal(false)} open={showModal} enquiry={selectedEnquiry} />}
+      {loading && <LoadingIndicator visible={loading} />}
+      <PageTitle heading={messages.heading} />
+      <EnquiryTable enquiries={enquiries} onFilterChange={handleFilterChange} onAction={handleTableAction} />
+    </Container>
   );
 }

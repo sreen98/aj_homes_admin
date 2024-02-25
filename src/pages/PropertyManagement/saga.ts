@@ -17,7 +17,7 @@ export function* getAllProperties(data: RequestSagaParams) {
 }
 
 export function* getPropertyDetails(data: RequestSagaParams) {
-    try {
+  try {
     const response: ResponseGenerator = yield call(Endpoints.getPropertyDetails, data.payload);
     yield put(Actions.getPropertyDetailsSuccess(response.data.data));
   } catch (error: any) {
@@ -38,7 +38,6 @@ export function* createProperty(data: RequestSagaParams) {
 
 export function* updateProperty(data: RequestSagaParams) {
   try {
-    console.log('in saga',data.payload)
     const response: ResponseGenerator = yield call(Endpoints.updateProperty, data.payload);
     yield call(localRedirect, '/properties');
     yield put(Actions.updatePropertySuccess(response.data.data));
@@ -51,12 +50,11 @@ export function* updateProperty(data: RequestSagaParams) {
 export function* updateStatus(data: RequestSagaParams) {
   try {
     const response: ResponseGenerator = yield call(Endpoints.updateStatus, data.payload);
-    // console.log('🚀 ~ function*createProperty ~ data.payload):', data.payload);
     yield put(Actions.getAllProperties());
     yield put(Actions.updateStatusSuccess(response.data.data));
     yield call(statusHandlerSaga, { message: 'Successfully updated the status!' });
   } catch (error: any) {
-    yield call(errorHandlerSaga, error, Actions.updateStatusFailed);  
+    yield call(errorHandlerSaga, error, Actions.updateStatusFailed);
   }
 }
 
