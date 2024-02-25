@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Grid, Card, CardHeader, CardContent, Divider, Button, CardActionArea, CardActions } from '@mui/material';
+import { useState } from 'react';
+import { Grid, Card, CardHeader, CardContent, Divider, Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -32,28 +32,6 @@ const initialState = {
   mapLink: ''
 };
 
-const loadState = {
-  title: 'ABCD',
-  reference: 'dqwdwqdqwd',
-  postcode: '678912',
-  description: 'adajndqwdjhqwoidq',
-  area: 10,
-  floor: 20,
-  bathroom: 30,
-  bedroom: 40,
-  tenure: 'Fixed',
-  furnishingType: 'furnished',
-  lettingType: 'sfsgfsafd',
-  minTerm: 'ssdsdfds',
-  contractLength: 'fgawgwr',
-  deposit: '13211233',
-  price: '12331232',
-  payable: 'weekly',
-  type: 'adads',
-  status: 'available',
-  ytLink: 'ahdsiaduhiqh'
-};
-
 function NewPropertyForm() {
   const [state, setState] = useState<IState>(initialState);
   const dispatch = useDispatch();
@@ -72,18 +50,11 @@ function NewPropertyForm() {
     return isPass;
   };
   const handleSubmit = () => {
-    // console.log('state.values', state);
     const isValidForm = handleValidation();
-    // console.log('🚀 ~ handleSubmit ~ isValidForm:', isValidForm);
-
     if (isValidForm) {
       dispatch(createProperty(state));
     }
   };
-  //load values if edit
-  // useEffect(() => {
-  //   setState(loadState);
-  // }, []);
 
   return (
     <Grid container direction="row" justifyContent="center" alignItems="stretch" spacing={3}>
@@ -306,7 +277,7 @@ function NewPropertyForm() {
                 value={state.ytLink}
                 onChange={e => setState({ ...state, ytLink: e.target.value })}
               />
-               <TextField
+              <TextField
                 id="outlined-required"
                 label={messages.moreDetails.label.mapLink}
                 value={state.mapLink}
@@ -318,13 +289,7 @@ function NewPropertyForm() {
       </Grid>
 
       <Grid item xs={2}>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          color="primary"
-          size="small"
-          // startIcon={<AddIcon fontSize="small" />}
-        >
+        <Button onClick={handleSubmit} variant="contained" color="primary" size="small">
           {messages.button.submit}
         </Button>
       </Grid>

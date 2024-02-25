@@ -38,9 +38,7 @@ export default function Layout({ children }: Readonly<{ children: any }>) {
       return <HouseIcon />;
     } else if (data.icon === 'enquiries') {
       return <FeedbackIcon />;
-    } else {
-      return <PersonIcon />;
-    }
+    } else return null;
   };
 
   return (

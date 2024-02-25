@@ -20,7 +20,10 @@ export function* updateEnquiryStatus(data: RequestSagaParams) {
     const response: ResponseGenerator = yield call(Endpoints.updateEnquiryStatus, data.payload);
     yield put(Actions.getAllEnquiries({}));
     yield put(Actions.updateEnquiryStatusSuccess(response.data.data));
-    yield call(statusHandlerSaga, { message: 'Successfully updated the status!' });
+    yield call(statusHandlerSaga, {
+      message: 'Successfully updated the status!',
+      type: 'error'
+    });
   } catch (error: any) {
     yield call(errorHandlerSaga, error, Actions.updateEnquiryStatusFailed);
   }

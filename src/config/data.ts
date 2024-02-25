@@ -69,10 +69,6 @@ export const mainList: {
   {
     id: 'enquiries',
     name: 'Enquiries'
-  },
-  {
-    id: 'myAccount',
-    name: 'My Account'
   }
 ];
 

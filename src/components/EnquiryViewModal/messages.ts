@@ -9,8 +9,7 @@ const messages = {
     currentStatus: 'Current Status'
   },
   button: {
-    submit: 'Submit',
-    cancel: 'Cancel'
+    ok: 'Ok'
   }
 };
 

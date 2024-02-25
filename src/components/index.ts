@@ -5,12 +5,12 @@ import SingleSelect from './SingleSelect';
 import TextInput from './TextInput';
 import LoadingStateButton from './LoadingStateButton';
 import Icon from './Icon';
-import Copyright from './CopyRight';
 import AppBar from './AppBar';
 import Drawer from './Drawer';
 import Alert from './Alert';
 import UpdateStatusModal from './UpdateStatusModal';
 import EnquiryViewModal from './EnquiryViewModal';
+import EnquiryStatusChip from './EnquiryStatusChip';
 export {
   LoadingIndicator,
   MultiSelect,
@@ -19,10 +19,10 @@ export {
   TextInput,
   LoadingStateButton,
   Icon,
-  Copyright,
   AppBar,
   Drawer,
   Alert,
   UpdateStatusModal,
-  EnquiryViewModal
+  EnquiryViewModal,
+  EnquiryStatusChip
 };

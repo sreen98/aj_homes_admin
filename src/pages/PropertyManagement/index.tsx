@@ -50,7 +50,7 @@ export default function PropertyManagement() {
       <Container maxWidth="xl" sx={{ marginBottom: '2rem', marginLeft: '2rem' }}>
         {loading && <LoadingIndicator visible={loading} />}
         <PageTitle heading={messages.heading} buttonText={messages.button} onButtonClick={handleAddNext} />
-        <Grid container spacing={{ xs: 2, md: 3, lg: 4 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+        <Grid container spacing={{ xs: 2, md: 3, lg: 4 }} columns={{ xs: 1, sm: 2, md: 12 }}>
           <PropertyCard
             properties={properties}
             onOpenModal={(id: string) => {
