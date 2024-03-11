@@ -29,9 +29,20 @@ export default function PropertyManagement() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleFilterChange = (status: string) => {
-    dispatch(getAllEnquiries(status === 'contacted' ? true : false));
-  };
+  const handleFilterChange =(flag: string) =>{
+    let status;
+    if(flag === "contacted"){
+      status = true
+    } else if(flag ==="notContacted"){
+      status = false
+    } else{
+      dispatch(getAllEnquiries({}))
+      return;
+    }
+    dispatch(getAllEnquiries({status}))
+
+  }
+
   const handleStatusChange = (status: string) => {
     // console.log('🚀 ~ handleStatusChange ~ status:', status);
     // dispatch(getAllEnquiries({}));

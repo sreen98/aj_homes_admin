@@ -36,6 +36,16 @@ export function* createProperty(data: RequestSagaParams) {
   }
 }
 
+export function* uploadImage(data: RequestSagaParams){
+  try {
+    const response: ResponseGenerator = yield call(Endpoints.uploadImage, data.payload);
+    yield put(Actions.uploadImageSuccess(response.data.data))
+  } catch (error) {
+    yield call(errorHandlerSaga, error, Actions.uploadImageFailed)
+    
+  }
+}
+
 export function* updateProperty(data: RequestSagaParams) {
   try {
     console.log('in saga',data.payload)
@@ -62,6 +72,7 @@ export function* updateStatus(data: RequestSagaParams) {
 
 export function* propertyManagementWatcherSaga(): SagaIterator {
   yield all([yield takeLatest(Actions.getAllProperties.type, getAllProperties)]);
+  yield all([yield takeLatest(Actions.uploadImage.type, uploadImage)])
   yield all([yield takeLatest(Actions.getPropertyDetails.type, getPropertyDetails)]);
   yield all([yield takeLatest(Actions.createProperty.type, createProperty)]);
   yield all([yield takeLatest(Actions.updateProperty.type, updateProperty)]);

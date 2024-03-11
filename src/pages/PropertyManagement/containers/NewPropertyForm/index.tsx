@@ -6,8 +6,22 @@ import MenuItem from '@mui/material/MenuItem';
 import messages from './messages';
 import { IState } from './types';
 import { contractOptions, payableOptions, statusOptions } from 'config';
-import { createProperty } from 'pages/PropertyManagement/slice';
+import { createProperty, uploadImage } from 'pages/PropertyManagement/slice';
 import { useDispatch } from 'react-redux';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1
+});
 
 const initialState = {
   title: '',
@@ -51,11 +65,13 @@ const loadState = {
   payable: 'weekly',
   type: 'adads',
   status: 'available',
-  ytLink: 'ahdsiaduhiqh'
+  ytLink: 'ahdsiaduhiqh',
+  images: {}
 };
 
 function NewPropertyForm() {
   const [state, setState] = useState<IState>(initialState);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const dispatch = useDispatch();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, id: 'payable' | 'status' | 'furnishingType') => {
     setState({ ...state, [id]: event.target.value });
@@ -71,19 +87,21 @@ function NewPropertyForm() {
     });
     return isPass;
   };
-  const handleSubmit = () => {
-    // console.log('state.values', state);
-    const isValidForm = handleValidation();
-    // console.log('🚀 ~ handleSubmit ~ isValidForm:', isValidForm);
+  
+  const handleFileChange = (event: any) => {
+    const files = event.target.files[0];
+    const formData = new FormData();
+    formData.append('file', files);
+    dispatch(uploadImage(formData));
+    setSelectedFiles((prevFiles): any => [...prevFiles, formData.get('file')]);
+  };
 
+  const handleSubmit = () => {
+    const isValidForm = handleValidation();
     if (isValidForm) {
       dispatch(createProperty(state));
     }
   };
-  //load values if edit
-  // useEffect(() => {
-  //   setState(loadState);
-  // }, []);
 
   return (
     <Grid container direction="row" justifyContent="center" alignItems="stretch" spacing={3}>
@@ -316,19 +334,31 @@ function NewPropertyForm() {
           </CardContent>
         </Card>
       </Grid>
-
-      <Grid item xs={2}>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          color="primary"
-          size="small"
-          // startIcon={<AddIcon fontSize="small" />}
-        >
-          {messages.button.submit}
-        </Button>
+      <Grid item xs={12} mb={6}> 
+      <Card>
+         <CardHeader title={messages.imageUpload.title} />
+          <Divider />
+           <Grid container spacing={3} sx={{ margin: '2rem', width: '100%', height: '100%' }}>
+             {selectedFiles.map((file, index) => ( 
+             <Grid item xs={3} key={index}> <img src={URL.createObjectURL(file)} alt={`Preview ${index + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> 
+             </Grid> ))}
+              </Grid> 
+              <CardContent> 
+                <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '25rem' }, '& .MuiFormControl-fullWidth': { m: 1, width: '77rem' } }} noValidate autoComplete="off" style={{ textAlign: 'center' }} > 
+                <Button component="label" role={undefined} variant="contained" tabIndex={-1} startIcon={<CloudUploadIcon />} > 
+                {messages.uploadFile}
+                 <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} /> 
+                 </Button>
+                  </Box>
+                   </CardContent>
+                    </Card>
+                     </Grid>
+                  <Grid item xs={2}> 
+                  <Button onClick={handleSubmit} variant="contained" color="primary" size="large">
+                     {messages.button.submit}
+                     </Button>
+                  </Grid>
       </Grid>
-    </Grid>
   );
 }
 

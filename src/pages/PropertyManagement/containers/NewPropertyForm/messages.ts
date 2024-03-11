@@ -28,6 +28,10 @@ const messages = {
       deposit: 'Deposit'
     }
   },
+  uploadFile: 'Upload File',
+  imageUpload:{
+    title: 'Add Images'
+  },
   moreDetails: {
     title: 'More Details',
     label: {
