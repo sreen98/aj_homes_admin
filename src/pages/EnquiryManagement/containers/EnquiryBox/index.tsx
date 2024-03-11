@@ -55,7 +55,7 @@ const getStatusLabel = (status: IEnquireStatus): JSX.Element => {
 
 const getTableBody = (enquiry: IEnquiry, theme: any, onIconClick: (type: 'update' | 'view', id: string) => void, handleMarkAsRead: any) => {
   return (
-    <TableRow hover key={enquiry.id}>
+    <TableRow hover key={enquiry?.id}>
       <TableCell>
         <Typography variant="body1" fontWeight="bold" color="text.primary" gutterBottom noWrap>
           {enquiry.name}
@@ -96,8 +96,8 @@ const getTableBody = (enquiry: IEnquiry, theme: any, onIconClick: (type: 'update
             }}
             color="inherit"
             size="small"
-            onClick={() => handleMarkAsRead(enquiry.id)}
-            disabled={enquiry.status !== 'contacted'}
+            onClick={() => handleMarkAsRead(enquiry?.id)}
+            disabled={enquiry.status === 'contacted'}
           >
             <DoneOutlinedIcon fontSize="small" />
           </IconButton>
@@ -115,10 +115,10 @@ const EnquiryTable: FC<EnquiryTableProps> = ({ enquiries, onFilterChange, onActi
   const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>([]);
   const selectedBulkActions = selectedCryptoOrders.length > 0;
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
-  const [status, setStatus] = useState<string>('');
+  const [status, setStatus] = useState<string>('all');
 
   const handleStatusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStatus(event.target.value);

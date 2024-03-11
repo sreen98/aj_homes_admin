@@ -38,6 +38,18 @@ const propertySlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    uploadImage: (state, action: PayloadAction<FormData>) =>{
+      state.loading = true;
+      state.error = ''
+    },
+    uploadImageSuccess: (state,action: PayloadAction<any>) => {
+      state.loading = false;
+      state.error = ''
+    },
+    uploadImageFailed:(state, action: PayloadAction<any>) => {
+      state.loading = false;
+      state.error = action.payload
+    },
     updateProperty:(state,action: PayloadAction<{ id: string; state: any}> )=>{
       state.loading = true
       state.error = '';
@@ -90,6 +102,9 @@ export const {
   updateProperty,
   updatePropertyFailed,
   updatePropertySuccess,
+  uploadImage,
+  uploadImageSuccess,
+  uploadImageFailed,
   updateStatus,
   updateStatusSuccess,
   updateStatusFailed
