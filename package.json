@@ -103,7 +103,7 @@
     "husky": "^7.0.4",
     "lint-staged": "^12.3.5",
     "prettier": "^2.8.8",
-    "typescript": "^5.0.4"
+    "typescript": "^5.4.2"
   },
   "engines": {
     "npm": ">=5",
