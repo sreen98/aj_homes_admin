@@ -43,7 +43,8 @@ const initialState = {
   type: '',
   status: '',
   ytLink: '',
-  mapLink: ''
+  mapLink: '',
+  images: []
 };
 
 const loadState = {
@@ -65,8 +66,7 @@ const loadState = {
   payable: 'weekly',
   type: 'adads',
   status: 'available',
-  ytLink: 'ahdsiaduhiqh',
-  images: {}
+  ytLink: 'ahdsiaduhiqh'
 };
 
 function NewPropertyForm() {
