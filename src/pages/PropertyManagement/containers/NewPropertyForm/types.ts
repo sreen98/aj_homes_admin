@@ -13,7 +13,8 @@ export interface IState {
   minTerm: string;
   contractLength: string;
   deposit: string;
-  price: string;
+  price: number;
+  currency: string,
   payable: string;
   type: string;
   status: string;
