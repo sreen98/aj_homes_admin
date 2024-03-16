@@ -38,7 +38,8 @@ const initialState = {
   minTerm: '',
   contractLength: '',
   deposit: '',
-  price: '',
+  price: 0,
+  currency:'£',
   payable: '',
   type: '',
   status: '',
@@ -62,7 +63,8 @@ const loadState = {
   minTerm: 'ssdsdfds',
   contractLength: 'fgawgwr',
   deposit: '13211233',
-  price: '12331232',
+  price:0,
+  currency:'£',
   payable: 'weekly',
   type: 'adads',
   status: 'available',
@@ -277,12 +279,20 @@ function NewPropertyForm() {
               noValidate
               autoComplete="off"
             >
+               <TextField
+                required
+                id="outlined-required"
+                disabled
+                label={messages.moreDetails.label.currency}
+                value={state.currency}
+                onChange={e => setState({ ...state, currency: e.target.value })}
+              />
               <TextField
                 required
                 id="outlined-required"
                 label={messages.moreDetails.label.price}
                 value={state.price}
-                onChange={e => setState({ ...state, price: e.target.value })}
+                onChange={e => setState({ ...state, price: Number(e.target.value) })}
               />
               <TextField
                 id="outlined-select-payable"

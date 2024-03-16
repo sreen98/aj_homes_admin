@@ -35,6 +35,7 @@ const messages = {
   moreDetails: {
     title: 'More Details',
     label: {
+      currency: 'Currency',
       price: 'Price in Pounds',
       payable: 'Payable',
       type: 'Property Type',
