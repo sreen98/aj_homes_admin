@@ -13,7 +13,7 @@ export const Routes = (props: any) => {
       {pageRoutes.private.map((route, ind) => (
         <PrivateRoute exact {...route} {...props} key={ind} />
       ))}
-      <Redirect from="/" to="/dashboard" />
+      <Redirect from="/" to="/admin/properties" />
     </Switch>
   );
 };

@@ -1,6 +1,7 @@
 {
   "name": "boilerplate-rtk-saga",
   "version": "0.0.1",
+  "homepage": "/admin",
   "private": true,
   "repository": {
     "type": "git",
@@ -103,7 +104,7 @@
     "husky": "^7.0.4",
     "lint-staged": "^12.3.5",
     "prettier": "^2.8.8",
-    "typescript": "^5.0.4"
+    "typescript": "^5.4.2"
   },
   "engines": {
     "npm": ">=5",

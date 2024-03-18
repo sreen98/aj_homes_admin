@@ -32,7 +32,7 @@ export default function PropertyManagement() {
   }, []);
 
   const handleAddNext = () => {
-    localRedirect('/properties/new');
+    localRedirect('/admin/properties/new');
   };
   const handleStatusUpdate = (status: string) => {
     dispatch(updateStatus({ id: propId, status }));

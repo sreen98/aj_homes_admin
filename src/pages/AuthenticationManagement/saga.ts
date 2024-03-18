@@ -10,7 +10,7 @@ export function* loginUser(data: RequestSagaParams) {
   try {
     yield call(setCookie, 'isAdminLoggedIn', 'true');
     yield call(Endpoints.loginUser, data.payload);
-    yield call(localRedirect, '/properties');
+    yield call(localRedirect, '/admin/properties');
     yield put(Actions.loginUserSuccess());
     yield call(statusHandlerSaga, { message: 'Successfully Logged In!' });
   } catch (error: any) {
@@ -21,7 +21,7 @@ export function* loginUser(data: RequestSagaParams) {
 export function* logoutUser(): SagaIterator {
   try {
     yield call(setCookie, 'isAdminLoggedIn', 'false');
-    yield call(localRedirect, '/login');
+    yield call(localRedirect, '/admin/login');
     yield put(Actions.loginUserSuccess());
     yield call(statusHandlerSaga, { message: 'Successfully Logged Out!' });
   } catch (error: any) {

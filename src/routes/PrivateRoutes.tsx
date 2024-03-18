@@ -15,7 +15,7 @@ export const PrivateRoute = ({
       {...rest}
       render={(props: any): any => {
         if (!isLoggedIn) {
-          return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />;
+          return <Redirect to={{ pathname: '/admin/login', state: { from: props.location } }} />;
         }
         return (
           <Layout {...layoutProps}>

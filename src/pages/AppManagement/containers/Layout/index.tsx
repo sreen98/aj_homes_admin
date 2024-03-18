@@ -11,7 +11,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
 import HouseIcon from '@mui/icons-material/House';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 
@@ -30,16 +29,14 @@ export default function Layout({ children }: Readonly<{ children: any }>) {
   };
 
   const onClickDrawerItem = (id: string) => {
-    localRedirect(`/${id}`);
+    localRedirect(`/admin/${id}`);
   };
 
   const DrawerIcon = (data: { icon: string }) => {
     if (data.icon === 'properties') {
       return <HouseIcon />;
-    } else if (data.icon === 'enquiries') {
-      return <FeedbackIcon />;
     } else {
-      return <PersonIcon />;
+      return <FeedbackIcon />;
     }
   };
 

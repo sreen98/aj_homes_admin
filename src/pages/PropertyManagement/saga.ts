@@ -9,7 +9,7 @@ import { RequestSagaParams, ResponseGenerator } from 'types';
 export function* getAllProperties(data: RequestSagaParams) {
   try {
     const response: ResponseGenerator = yield call(Endpoints.getAllProperties);
-    yield call(localRedirect, '/properties');
+    yield call(localRedirect, '/admin/properties');
     yield put(Actions.getAllPropertiesSuccess(response.data.data));
   } catch (error: any) {
     yield call(errorHandlerSaga, error, Actions.getAllPropertiesFailed);
@@ -17,7 +17,7 @@ export function* getAllProperties(data: RequestSagaParams) {
 }
 
 export function* getPropertyDetails(data: RequestSagaParams) {
-    try {
+  try {
     const response: ResponseGenerator = yield call(Endpoints.getPropertyDetails, data.payload);
     yield put(Actions.getPropertyDetailsSuccess(response.data.data));
   } catch (error: any) {
@@ -28,7 +28,7 @@ export function* getPropertyDetails(data: RequestSagaParams) {
 export function* createProperty(data: RequestSagaParams) {
   try {
     const response: ResponseGenerator = yield call(Endpoints.createProperty, data.payload);
-    yield call(localRedirect, '/properties');
+    yield call(localRedirect, '/admin/properties');
     yield put(Actions.createPropertySuccess(response.data.data));
     yield call(statusHandlerSaga, { message: 'Successfully added property!' });
   } catch (error: any) {
@@ -36,22 +36,21 @@ export function* createProperty(data: RequestSagaParams) {
   }
 }
 
-export function* uploadImage(data: RequestSagaParams){
+export function* uploadImage(data: RequestSagaParams) {
   try {
     const response: ResponseGenerator = yield call(Endpoints.uploadImage, data.payload);
-    console.log(response,'responseresponse')
-    yield put(Actions.uploadImageSuccess(response.data.data))
+    console.log(response, 'responseresponse');
+    yield put(Actions.uploadImageSuccess(response.data.data));
   } catch (error) {
-    yield call(errorHandlerSaga, error, Actions.uploadImageFailed)
-    
+    yield call(errorHandlerSaga, error, Actions.uploadImageFailed);
   }
 }
 
 export function* updateProperty(data: RequestSagaParams) {
   try {
-    console.log('in saga',data.payload)
+    console.log('in saga', data.payload);
     const response: ResponseGenerator = yield call(Endpoints.updateProperty, data.payload);
-    yield call(localRedirect, '/properties');
+    yield call(localRedirect, '/admin/properties');
     yield put(Actions.updatePropertySuccess(response.data.data));
     yield call(statusHandlerSaga, { message: 'Successfully added property!' });
   } catch (error: any) {
@@ -67,13 +66,13 @@ export function* updateStatus(data: RequestSagaParams) {
     yield put(Actions.updateStatusSuccess(response.data.data));
     yield call(statusHandlerSaga, { message: 'Successfully updated the status!' });
   } catch (error: any) {
-    yield call(errorHandlerSaga, error, Actions.updateStatusFailed);  
+    yield call(errorHandlerSaga, error, Actions.updateStatusFailed);
   }
 }
 
 export function* propertyManagementWatcherSaga(): SagaIterator {
   yield all([yield takeLatest(Actions.getAllProperties.type, getAllProperties)]);
-  yield all([yield takeLatest(Actions.uploadImage.type, uploadImage)])
+  yield all([yield takeLatest(Actions.uploadImage.type, uploadImage)]);
   yield all([yield takeLatest(Actions.getPropertyDetails.type, getPropertyDetails)]);
   yield all([yield takeLatest(Actions.createProperty.type, createProperty)]);
   yield all([yield takeLatest(Actions.updateProperty.type, updateProperty)]);

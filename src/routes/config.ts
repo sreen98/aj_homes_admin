@@ -1,6 +1,5 @@
 import {
   AuthenticationManagement,
-  DashboardManagement,
   PropertyCreateManagement,
   PropertyManagement,
   PropertyViewManagement,
@@ -10,16 +9,14 @@ import {
 
 export const pageRoutes = {
   private: [
-    { component: DashboardManagement, path: '/dashboard' },
-    { component: PropertyManagement, path: '/properties' },
-    { component: PropertyViewManagement, path: '/property/:propId' },
-    { component: PropertyCreateManagement, path: '/properties/new' },
-    { component: PropertyEditManagement, path: '/properties/edit/:propId' },
-    { component: EnquiryManagement, path: '/enquiries' }
+    { component: PropertyManagement, path: '/admin/properties' },
+    { component: PropertyViewManagement, path: '/admin/property/:propId' },
+    { component: PropertyCreateManagement, path: '/admin/properties/new' },
+    { component: PropertyEditManagement, path: '/admin/properties/edit/:propId' },
+    { component: EnquiryManagement, path: '/admin/enquiries' }
   ],
   public: [
-    { path: '/', component: AuthenticationManagement, section: 'login' },
-    { path: '/login', component: AuthenticationManagement, section: 'login' },
-    { path: '/register', component: AuthenticationManagement, section: 'register' }
+    { path: '/admin', component: AuthenticationManagement, section: 'login' },
+    { path: '/admin/login', component: AuthenticationManagement, section: 'login' }
   ]
 };
