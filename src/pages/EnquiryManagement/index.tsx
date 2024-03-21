@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Grid } from '@mui/material';
+import { Container } from '@mui/material';
 import { createStructuredSelector } from 'reselect';
 
 import PageTitle from 'components/PageTitle';
 import messages from './messages';
 import { EnquiryTable } from './containers';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllEnquiries, updateEnquiryStatus } from './slice';
+import { getAllEnquiries } from './slice';
 import * as Selectors from './selectors';
 import { EnquiryViewModal, LoadingIndicator } from 'components';
-import { IProperty } from 'types';
-import { PropertyInitialState } from 'config';
+import { IEnquiry } from './types';
 
 const stateSelector = createStructuredSelector({
   loading: Selectors.makeSelectEnquiriesLoading(),
@@ -20,10 +19,9 @@ const stateSelector = createStructuredSelector({
 export default function PropertyManagement() {
   const dispatch = useDispatch();
   const { enquiries, loading } = useSelector(stateSelector);
-  console.log('🚀 ~ PropertyManagement ~ enquiries:', enquiries);
 
   const [showModal, setShowModal] = useState(false);
-  const [enqId, setEnqId] = useState('');
+  const [enquiry, setEnquiry] = useState({} as IEnquiry);
 
   useEffect(() => {
     dispatch(getAllEnquiries({}));
@@ -43,33 +41,19 @@ export default function PropertyManagement() {
     dispatch(getAllEnquiries({ status }));
   };
 
-  const handleStatusChange = (status: string) => {
-    // console.log('🚀 ~ handleStatusChange ~ status:', status);
-    // dispatch(getAllEnquiries({}));
-  };
   const handleTableAction = (type: 'update' | 'view', id: string) => {
     setShowModal(true);
+    const enq = enquiries.find(enquiry => {
+      return enquiry.id === id;
+    });
+    if (enq) {
+      setEnquiry(enq);
+    }
   };
   return (
     <>
       <Container maxWidth="xl" sx={{ marginBottom: '2rem' }}>
-        {showModal && (
-          <EnquiryViewModal
-            onClose={() => setShowModal(false)}
-            open={showModal}
-            enquiry={{
-              id: '1',
-              propertyId: '100',
-              name: 'Mildred',
-              emailId: 'ebebin@kowanfu.mo',
-              subject: 'pPoQBZCwVOWRnOnPtPv',
-              status: 'contacted',
-              message:
-                'impossible string frog excitement crop moving diagram cent press living doctor breathing single enter learn path snow rope money particular height radio part wealth'
-            }}
-            onSubmit={handleStatusChange}
-          />
-        )}
+        {showModal && <EnquiryViewModal onClose={() => setShowModal(false)} open={showModal} enquiry={enquiry} />}
         {loading && <LoadingIndicator visible={loading} />}
         <PageTitle heading={messages.heading} />
         <EnquiryTable enquiries={enquiries} onFilterChange={handleFilterChange} onAction={handleTableAction} />
