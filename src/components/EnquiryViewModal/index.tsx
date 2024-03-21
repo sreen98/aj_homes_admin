@@ -30,77 +30,64 @@ const getStatusLabel = (status: IEnquireStatus): JSX.Element => {
 };
 
 export default function EnquiryViewModal({ onClose, open, enquiry, onSubmit }: IEnquiryViewModalProps) {
-  console.log('🚀 ~ EnquiryViewModal ~ enquiry:', enquiry);
-  const [status, setStatus] = React.useState('');
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const formJson = Object.fromEntries(formData.entries());
-    const status = formJson.status;
-    onSubmit(status.toString());
-    onClose();
-  };
-
   return (
     <Dialog open={open} onClose={onClose} maxWidth={'md'}>
-      <form onSubmit={handleSubmit}>
-        <DialogContent>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Card>
-                <Box p={3} display="flex" alignItems="center" justifyContent="space-between">
-                  <Box>
-                    <Typography variant="h4" gutterBottom>
-                      {messages.title}
-                    </Typography>
-                    <Typography variant="subtitle2">{enquiry.subject}</Typography>
-                  </Box>
-                  {/* <Button variant="text" startIcon={<EditTwoToneIcon />}>
+      <DialogContent>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Card>
+              <Box p={3} display="flex" alignItems="center" justifyContent="space-between">
+                <Box>
+                  <Typography variant="h4" gutterBottom>
+                    {messages.title}
+                  </Typography>
+                  <Typography variant="subtitle2">{enquiry.subject}</Typography>
+                </Box>
+                {/* <Button variant="text" startIcon={<EditTwoToneIcon />}>
               Edit
             </Button> */}
-                </Box>
-                <Divider />
-                <CardContent sx={{ p: 4 }}>
-                  <Typography variant="subtitle2">
-                    <Grid container spacing={0}>
-                      <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
-                        <Box pr={3} pb={2}>
-                          {messages.name}
-                        </Box>
-                      </Grid>
-                      <Grid item xs={12} sm={8} md={9}>
-                        <Typography color="black">
-                          <b>{enquiry.name}</b>
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
-                        <Box pr={3} pb={2}>
-                          {messages.email}
-                        </Box>
-                      </Grid>
-                      <Grid item xs={12} sm={8} md={9}>
-                        <Typography color="black">
-                          <b>{enquiry.emailId}</b>
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
-                        <Box pr={3} pb={2}>
-                          {messages.message}
-                        </Box>
-                      </Grid>
-                      <Grid item xs={12} sm={8} md={9}>
-                        <Box sx={{ maxWidth: { xs: 'auto', sm: 300 } }}>
-                          <Typography color="black">{enquiry.message}</Typography>
-                        </Box>
-                      </Grid>
+              </Box>
+              <Divider />
+              <CardContent sx={{ p: 4 }}>
+                <Typography variant="subtitle2">
+                  <Grid container spacing={0}>
+                    <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                      <Box pr={3} pb={2}>
+                        {messages.name}
+                      </Box>
                     </Grid>
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
+                    <Grid item xs={12} sm={8} md={9}>
+                      <Typography color="black">
+                        <b>{enquiry.name}</b>
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                      <Box pr={3} pb={2}>
+                        {messages.email}
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={8} md={9}>
+                      <Typography color="black">
+                        <b>{enquiry.emailId}</b>
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                      <Box pr={3} pb={2}>
+                        {messages.message}
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={8} md={9}>
+                      <Box sx={{ maxWidth: { xs: 'auto', sm: 300 } }}>
+                        <Typography color="black">{enquiry.message}</Typography>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Typography>
+              </CardContent>
+            </Card>
           </Grid>
-          {/* <DialogContentText sx={{ paddingBottom: '20px' }}>{messages.helperText.status}</DialogContentText>
+        </Grid>
+        {/* <DialogContentText sx={{ paddingBottom: '20px' }}>{messages.helperText.status}</DialogContentText>
           <DialogContentText sx={{ paddingBottom: '20px' }}>{getStatusLabel(enquiry.status)}</DialogContentText>
           <TextField
             id="outlined-select-status"
@@ -117,12 +104,12 @@ export default function EnquiryViewModal({ onClose, open, enquiry, onSubmit }: I
               </MenuItem>
             ))}
           </TextField> */}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose}>{messages.button.cancel}</Button>
-          <Button type="submit">{messages.button.submit}</Button>
-        </DialogActions>
-      </form>
+      </DialogContent>
+      <DialogActions>
+        <Button type="submit" onClick={() => onClose()}>
+          {messages.button.submit}
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 }
