@@ -6,11 +6,10 @@ import MenuItem from '@mui/material/MenuItem';
 import messages from './messages';
 import { IState } from './types';
 import { contractOptions, payableOptions, statusOptions } from 'config';
-import { updateProperty ,getPropertyDetails} from 'pages/PropertyManagement/slice';
+import { updateProperty, getPropertyDetails } from 'pages/PropertyManagement/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import * as Selectors from '../../selectors';
-
 
 const initialState = {
   title: '',
@@ -39,8 +38,7 @@ const stateSelector = createStructuredSelector({
   property: Selectors.makeSelectPropertyData()
 });
 
-function EditPropertyForm({propId}: any) {
-  console.log(propId,'propId')
+function EditPropertyForm({ propId }: any) {
   const { property }: any = useSelector(stateSelector);
 
   const [state, setState] = useState<IState>(initialState);
@@ -62,7 +60,7 @@ function EditPropertyForm({propId}: any) {
   const handleSubmit = () => {
     const isValidForm = handleValidation();
     if (isValidForm) {
-      dispatch(updateProperty({id: propId, state}));
+      dispatch(updateProperty({ id: propId, state }));
     }
   };
 
@@ -71,32 +69,30 @@ function EditPropertyForm({propId}: any) {
   }, [propId]);
 
   useEffect(() => {
-    console.log('inside useffect')
-      const propertyData = property
-      console.log(propertyData,'propdata')
+    const propertyData = property;
 
-      setState({
-        title: propertyData.title,
-        reference: propertyData.reference,
-        postcode: propertyData.postcode,
-        description: propertyData.description,
-        area: propertyData.area,
-        floor: propertyData.floor,
-        bathroom: propertyData.bathroom,
-        bedroom: propertyData.bedroom,
-        tenure: propertyData.tenure,
-        furnishingType: propertyData.furnishingType,
-        lettingType: propertyData.lettingType,
-        minTerm: propertyData.minTerm,
-        contractLength: propertyData.contractLength,
-        deposit: propertyData.deposit,
-        price: propertyData.price,
-        payable: propertyData.payable,
-        type: propertyData.type,
-        status: propertyData.status,
-        ytLink: propertyData.ytLink,
-        mapLink: propertyData.mapLink
-      });
+    setState({
+      title: propertyData.title,
+      reference: propertyData.reference,
+      postcode: propertyData.postcode,
+      description: propertyData.description,
+      area: propertyData.area,
+      floor: propertyData.floor,
+      bathroom: propertyData.bathroom,
+      bedroom: propertyData.bedroom,
+      tenure: propertyData.tenure,
+      furnishingType: propertyData.furnishingType,
+      lettingType: propertyData.lettingType,
+      minTerm: propertyData.minTerm,
+      contractLength: propertyData.contractLength,
+      deposit: propertyData.deposit,
+      price: propertyData.price,
+      payable: propertyData.payable,
+      type: propertyData.type,
+      status: propertyData.status,
+      ytLink: propertyData.ytLink,
+      mapLink: propertyData.mapLink
+    });
   }, [property]);
 
   return (

@@ -20,6 +20,7 @@ const stateSelector = createStructuredSelector({
 export default function PropertyManagement() {
   const dispatch = useDispatch();
   const { enquiries, loading } = useSelector(stateSelector);
+  console.log('🚀 ~ PropertyManagement ~ enquiries:', enquiries);
 
   const [showModal, setShowModal] = useState(false);
   const [enqId, setEnqId] = useState('');
@@ -29,19 +30,18 @@ export default function PropertyManagement() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleFilterChange =(flag: string) =>{
+  const handleFilterChange = (flag: string) => {
     let status;
-    if(flag === "contacted"){
-      status = true
-    } else if(flag ==="notContacted"){
-      status = false
-    } else{
-      dispatch(getAllEnquiries({}))
+    if (flag === 'contacted') {
+      status = true;
+    } else if (flag === 'notContacted') {
+      status = false;
+    } else {
+      dispatch(getAllEnquiries({}));
       return;
     }
-    dispatch(getAllEnquiries({status}))
-
-  }
+    dispatch(getAllEnquiries({ status }));
+  };
 
   const handleStatusChange = (status: string) => {
     // console.log('🚀 ~ handleStatusChange ~ status:', status);

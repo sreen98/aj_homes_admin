@@ -5,12 +5,15 @@ import { errorHandlerSaga, localRedirect, setCookie, statusHandlerSaga } from 'u
 
 import * as Actions from './slice';
 import { RequestSagaParams } from 'types';
+import { ResponseGenerator } from 'next/dist/server/response-cache';
 
 export function* loginUser(data: RequestSagaParams) {
   try {
-    yield call(setCookie, 'isAdminLoggedIn', 'true');
-    yield call(Endpoints.loginUser, data.payload);
+    const response: { data: { token: string } } = yield call(Endpoints.loginUser, data.payload);
+    console.log('🚀 ~ function*loginUser ~ response:', response);
     yield call(localRedirect, '/admin/properties');
+    localStorage.setItem('accessToken', response.data.token);
+    // yield call(setCookie, 'Authorization', response.data.token);
     yield put(Actions.loginUserSuccess());
     yield call(statusHandlerSaga, { message: 'Successfully Logged In!' });
   } catch (error: any) {
@@ -20,8 +23,9 @@ export function* loginUser(data: RequestSagaParams) {
 
 export function* logoutUser(): SagaIterator {
   try {
-    yield call(setCookie, 'isAdminLoggedIn', 'false');
+    // yield call(setCookie, 'isAdminLoggedIn', 'false');
     yield call(localRedirect, '/admin/login');
+    localStorage.removeItem('accessToken');
     yield put(Actions.loginUserSuccess());
     yield call(statusHandlerSaga, { message: 'Successfully Logged Out!' });
   } catch (error: any) {

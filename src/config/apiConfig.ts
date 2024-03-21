@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { localRedirect } from 'utils';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL || 'https://jsonplaceholder.typicode.com/';
 const refreshEndpoint = process.env.REACT_APP_API_REFRESH_URL || 'localhost';
@@ -7,9 +8,10 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(config => {
+  // const accessToken = JSON.parse(document.cookie);
   const accessToken = localStorage.getItem('accessToken');
   if (accessToken) {
-    config.headers['Authorization'] = `Bearer ${accessToken}`;
+    config.headers['Authorization'] = `${accessToken}`;
   }
   return config;
 });
@@ -18,19 +20,12 @@ api.interceptors.response.use(
   response => response,
   async error => {
     const originalRequest = error.config;
-    const refreshToken = localStorage.getItem('refreshToken');
 
-    if (error.response.status === 401 && !originalRequest._retry && refreshToken) {
+    if (error.response.status === 401) {
       originalRequest._retry = true;
-
       try {
-        const response = await axios.post(refreshEndpoint, { refreshToken });
-        const newAccessToken = response.data.accessToken;
-
-        localStorage.setItem('accessToken', newAccessToken);
-
-        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-        return axios(originalRequest);
+        localStorage.removeItem('accessToken');
+        localRedirect('/admin/login');
       } catch (refreshError) {
         console.log('Refresh token failed', refreshError);
       }
