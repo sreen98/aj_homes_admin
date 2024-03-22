@@ -4,6 +4,7 @@ const messages = {
     label: {
       title: 'Title',
       description: 'Description',
+      address: 'Address',
       reference: 'Reference',
       postcode: 'Post Code'
     }
@@ -29,7 +30,7 @@ const messages = {
     }
   },
   uploadFile: 'Upload File',
-  imageUpload:{
+  imageUpload: {
     title: 'Add Images'
   },
   moreDetails: {

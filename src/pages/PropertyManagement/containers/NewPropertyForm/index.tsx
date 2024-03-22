@@ -28,6 +28,7 @@ const initialState = {
   reference: '',
   postcode: '',
   description: '',
+  address: '',
   area: 0,
   floor: 0,
   bathroom: 0,
@@ -39,7 +40,7 @@ const initialState = {
   contractLength: '',
   deposit: '',
   price: 0,
-  currency:'£',
+  currency: '£',
   payable: '',
   type: '',
   status: '',
@@ -53,6 +54,7 @@ const loadState = {
   reference: 'dqwdwqdqwd',
   postcode: '678912',
   description: 'adajndqwdjhqwoidq',
+  address: 'Address 123',
   area: 10,
   floor: 20,
   bathroom: 30,
@@ -63,8 +65,8 @@ const loadState = {
   minTerm: 'ssdsdfds',
   contractLength: 'fgawgwr',
   deposit: '13211233',
-  price:0,
-  currency:'£',
+  price: 0,
+  currency: '£',
   payable: 'weekly',
   type: 'adads',
   status: 'available',
@@ -78,6 +80,8 @@ function NewPropertyForm() {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, id: 'payable' | 'status' | 'furnishingType') => {
     setState({ ...state, [id]: event.target.value });
   };
+  const bathroomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const bedroomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   const handleValidation = () => {
     const requiredFields = ['title', 'postcode', 'description', 'price', 'payable', 'status'];
@@ -89,12 +93,22 @@ function NewPropertyForm() {
     });
     return isPass;
   };
-  
+
   const handleFileChange = (event: any) => {
     const files = event.target.files[0];
     const formData = new FormData();
     formData.append('file', files);
-    dispatch(uploadImage(formData));
+    dispatch(
+      uploadImage({
+        image: formData,
+        callback: (imgUrl: string): void => {
+          setState((prevState: any) => ({
+            ...prevState,
+            images: [...prevState.images, imgUrl]
+          }));
+        }
+      })
+    );
     setSelectedFiles((prevFiles): any => [...prevFiles, formData.get('file')]);
   };
 
@@ -151,6 +165,15 @@ function NewPropertyForm() {
                 value={state.description}
                 onChange={e => setState({ ...state, description: e.target.value })}
               />
+              <TextField
+                required
+                multiline
+                fullWidth
+                id="outlined-textarea"
+                label={messages.basicInfo.label.address}
+                value={state.address}
+                onChange={e => setState({ ...state, address: e.target.value })}
+              />
             </Box>
           </CardContent>
         </Card>
@@ -185,19 +208,27 @@ function NewPropertyForm() {
                 onChange={e => setState({ ...state, floor: Number(e.target.value) })}
               />
               <TextField
-                id="outlined-required"
-                type="number"
+                id=""
+                select
                 label={messages.propInfo.label.bathroom}
                 value={state.bathroom}
                 onChange={e => setState({ ...state, bathroom: Number(e.target.value) })}
-              />
+              >
+                {bathroomOptions.map(item => (
+                  <MenuItem value={item}>{item}</MenuItem>
+                ))}
+              </TextField>
               <TextField
-                id="outlined-required"
-                type="number"
+                id=""
+                select
                 label={messages.propInfo.label.bedroom}
                 value={state.bedroom}
                 onChange={e => setState({ ...state, bedroom: Number(e.target.value) })}
-              />
+              >
+                {bedroomOptions.map(item => (
+                  <MenuItem value={item}>{item}</MenuItem>
+                ))}
+              </TextField>
               <TextField
                 id="outlined-required"
                 label={messages.propInfo.label.tenure}
@@ -279,7 +310,7 @@ function NewPropertyForm() {
               noValidate
               autoComplete="off"
             >
-               <TextField
+              <TextField
                 required
                 id="outlined-required"
                 disabled
@@ -334,7 +365,7 @@ function NewPropertyForm() {
                 value={state.ytLink}
                 onChange={e => setState({ ...state, ytLink: e.target.value })}
               />
-               <TextField
+              <TextField
                 id="outlined-required"
                 label={messages.moreDetails.label.mapLink}
                 value={state.mapLink}
@@ -344,31 +375,53 @@ function NewPropertyForm() {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={12} mb={6}> 
-      <Card>
-         <CardHeader title={messages.imageUpload.title} />
+      <Grid item xs={12} mb={6}>
+        <Card>
+          <CardHeader title={messages.imageUpload.title} />
           <Divider />
-           <Grid container spacing={3} sx={{ margin: '2rem', width: '100%', height: '100%' }}>
-             {selectedFiles.map((file, index) => ( 
-             <Grid item xs={3} key={index}> <img src={URL.createObjectURL(file)} alt={`Preview ${index + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> 
-             </Grid> ))}
-              </Grid> 
-              <CardContent> 
-                <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '25rem' }, '& .MuiFormControl-fullWidth': { m: 1, width: '77rem' } }} noValidate autoComplete="off" style={{ textAlign: 'center' }} > 
-                <Button component="label" role={undefined} variant="contained" tabIndex={-1} startIcon={<CloudUploadIcon />} > 
+          <Grid container spacing={3} sx={{ margin: '2rem', width: '100%', height: '100%' }}>
+            {selectedFiles.map((file, index) => (
+              <Grid item xs={3} key={index}>
+                {' '}
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt={`Preview ${index + 1}`}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          <CardContent>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25rem' },
+                '& .MuiFormControl-fullWidth': { m: 1, width: '77rem' }
+              }}
+              noValidate
+              autoComplete="off"
+              style={{ textAlign: 'center' }}
+            >
+              <Button
+                component="label"
+                role={undefined}
+                variant="contained"
+                tabIndex={-1}
+                startIcon={<CloudUploadIcon />}
+              >
                 {messages.uploadFile}
-                 <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} /> 
-                 </Button>
-                  </Box>
-                   </CardContent>
-                    </Card>
-                     </Grid>
-                  <Grid item xs={2}> 
-                  <Button onClick={handleSubmit} variant="contained" color="primary" size="large">
-                     {messages.button.submit}
-                     </Button>
-                  </Grid>
+                <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
       </Grid>
+      <Grid item xs={2}>
+        <Button onClick={handleSubmit} variant="contained" color="primary" size="large">
+          {messages.button.submit}
+        </Button>
+      </Grid>
+    </Grid>
   );
 }
 

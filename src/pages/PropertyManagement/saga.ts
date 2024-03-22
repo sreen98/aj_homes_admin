@@ -39,7 +39,11 @@ export function* createProperty(data: RequestSagaParams) {
 export function* uploadImage(data: RequestSagaParams) {
   try {
     const response: ResponseGenerator = yield call(Endpoints.uploadImage, data.payload);
-    yield put(Actions.uploadImageSuccess(response.data.data));
+    console.log('🚀 ~ function*uploadImage ~ response:', response);
+    yield put(Actions.uploadImageSuccess(response?.data));
+    if (data.payload.callback) {
+      data.payload.callback(response?.data?.imageUrl);
+    }
   } catch (error) {
     yield call(errorHandlerSaga, error, Actions.uploadImageFailed);
   }
