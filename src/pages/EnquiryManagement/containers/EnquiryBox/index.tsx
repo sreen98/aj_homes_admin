@@ -1,20 +1,16 @@
-import { FC, ChangeEvent, useState } from 'react';
+import { FC, useState } from 'react';
 import {
   Tooltip,
   Divider,
   Box,
-  FormControl,
-  InputLabel,
   Card,
   IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
-  TablePagination,
   TableRow,
   TableContainer,
-  Select,
   MenuItem,
   Typography,
   useTheme,
@@ -27,7 +23,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import { EnquiryTableProps, IEnquireStatus } from './types';
 import { IEnquiry } from 'pages/EnquiryManagement/types';
-import { filterOptions, mockEnquiries, tableHeaders } from '../../data';
+import { filterOptions, tableHeaders } from '../../data';
 import messages from './messages';
 import { updateEnquiryStatus } from 'pages/EnquiryManagement/slice';
 import { useDispatch } from 'react-redux';
@@ -53,7 +49,12 @@ const getStatusLabel = (status: IEnquireStatus): JSX.Element => {
   return <Chip color={color} label={text} variant="outlined" sx={{ minWidth: '150px' }}></Chip>;
 };
 
-const getTableBody = (enquiry: IEnquiry, theme: any, onIconClick: (type: 'update' | 'view', id: string) => void, handleMarkAsRead: any) => {
+const getTableBody = (
+  enquiry: IEnquiry,
+  theme: any,
+  onIconClick: (type: 'update' | 'view', id: string) => void,
+  handleMarkAsRead: any
+) => {
   return (
     <TableRow hover key={enquiry?.id}>
       <TableCell>
@@ -96,7 +97,7 @@ const getTableBody = (enquiry: IEnquiry, theme: any, onIconClick: (type: 'update
             }}
             color="inherit"
             size="small"
-            onClick={() => handleMarkAsRead(enquiry?.id)}
+            onClick={() => handleMarkAsRead(enquiry?._id)}
             disabled={enquiry.status === 'contacted'}
           >
             <DoneOutlinedIcon fontSize="small" />
@@ -107,17 +108,8 @@ const getTableBody = (enquiry: IEnquiry, theme: any, onIconClick: (type: 'update
   );
 };
 
-const applyPagination = (cryptoOrders: IEnquiry[], page: number, limit: number): IEnquiry[] => {
-  return cryptoOrders.slice(page * limit, page * limit + limit);
-};
-
 const EnquiryTable: FC<EnquiryTableProps> = ({ enquiries, onFilterChange, onAction }) => {
-  const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>([]);
-  const selectedBulkActions = selectedCryptoOrders.length > 0;
-
   const dispatch = useDispatch();
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
   const [status, setStatus] = useState<string>('all');
 
   const handleStatusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,9 +117,9 @@ const EnquiryTable: FC<EnquiryTableProps> = ({ enquiries, onFilterChange, onActi
     onFilterChange(event.target.value);
   };
 
-  const handleMarkAsRead =(id: any) =>{
-    dispatch(updateEnquiryStatus(id as any))
-  }
+  const handleMarkAsRead = (id: any) => {
+    dispatch(updateEnquiryStatus(id as any));
+  };
   const theme = useTheme();
 
   const handleIconClick = (type: 'update' | 'view', id: string) => {
@@ -167,20 +159,12 @@ const EnquiryTable: FC<EnquiryTableProps> = ({ enquiries, onFilterChange, onActi
           <TableHead>
             <TableRow>{getTableHeaders()}</TableRow>
           </TableHead>
-          <TableBody>{enquiries.map(enquiry => getTableBody(enquiry, theme, handleIconClick, handleMarkAsRead))}</TableBody>
+          <TableBody>
+            {enquiries.map(enquiry => getTableBody(enquiry, theme, handleIconClick, handleMarkAsRead))}
+          </TableBody>
         </Table>
       </TableContainer>
-      <Box p={2}>
-        {/* <TablePagination
-          component="div"
-          count={filteredCryptoOrders.length}
-          onPageChange={handlePageChange}
-          onRowsPerPageChange={handleLimitChange}
-          page={page}
-          rowsPerPage={limit}
-          rowsPerPageOptions={[5, 10, 25, 30]}
-        /> */}
-      </Box>
+      <Box p={2}></Box>
     </Card>
   );
 };

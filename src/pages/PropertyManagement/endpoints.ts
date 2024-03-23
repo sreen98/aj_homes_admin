@@ -1,7 +1,7 @@
 import request from 'config/apiConfig';
 
 export const getAllProperties = () => {
-  return request.get('/properties');
+  return request.get('/properties', { params: { isAdmin: true } });
 };
 
 export const getPropertyDetails = (id: string) => {
@@ -12,9 +12,9 @@ export const createProperty = (data: any) => {
   return request.post('/properties', data);
 };
 
-export const uploadImage =(file: any) => {
-  return request.post('/properties/image-upload', file)
-}
+export const uploadImage = (file: any) => {
+  return request.post('/properties/image-upload', file);
+};
 
 export const updateProperty = (data: any) => {
   return request.put(`/properties/${data.id}`, data.state);

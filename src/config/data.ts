@@ -1,60 +1,60 @@
 export const statusOptions = [
   {
-    value: 'availableImmediately',
+    value: 'Available Immediately',
     label: 'Available Immediately'
   },
   {
-    value: 'available',
+    value: 'Available',
     label: 'Available'
   },
   {
-    value: 'letAgreed',
+    value: 'Let - Agreed',
     label: 'Let - Agreed'
   },
   {
-    value: 'letUnavailable',
+    value: 'Let - Unavailable',
     label: 'Let - Unavailable'
   },
   {
-    value: 'sold',
+    value: 'Sold',
     label: 'Sold'
   },
   {
-    value: 'soldSTC)',
+    value: 'Sold -  Subject To Contract (STC)',
     label: 'Sold -  Subject To Contract (STC)'
   },
   {
-    value: 'shortTermLet',
+    value: 'Short Term Let',
     label: 'Short Term Let'
   },
   {
-    value: 'archive',
+    value: 'Archive',
     label: 'Archive'
   }
 ];
 
 export const payableOptions = [
   {
-    value: 'weekly',
+    value: 'Weekly',
     label: 'Weekly'
   },
   {
-    value: 'monthly',
+    value: 'Monthly',
     label: 'Monthly'
   },
   {
-    value: 'yearly',
+    value: 'Yearly',
     label: 'Yearly'
   }
 ];
 
 export const contractOptions = [
   {
-    value: 'furnished',
+    value: 'Furnished',
     label: 'Furnished'
   },
   {
-    value: 'unFurnished',
+    value: 'Un-Furnished',
     label: 'Un-Furnished'
   }
 ];

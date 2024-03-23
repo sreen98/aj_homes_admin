@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Grid, Card, CardHeader, CardContent, Divider, Button, CardActionArea, CardActions } from '@mui/material';
+import { useState } from 'react';
+import { Grid, Card, CardHeader, CardContent, Divider, Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,19 +9,6 @@ import { contractOptions, payableOptions, statusOptions } from 'config';
 import { createProperty, uploadImage } from 'pages/PropertyManagement/slice';
 import { useDispatch } from 'react-redux';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { styled } from '@mui/material/styles';
-
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1
-});
 
 const initialState = {
   title: '',
@@ -48,30 +35,7 @@ const initialState = {
   mapLink: '',
   images: []
 };
-
-const loadState = {
-  title: 'ABCD',
-  reference: 'dqwdwqdqwd',
-  postcode: '678912',
-  description: 'adajndqwdjhqwoidq',
-  address: 'Address 123',
-  area: 10,
-  floor: 20,
-  bathroom: 30,
-  bedroom: 40,
-  tenure: 'Fixed',
-  furnishingType: 'furnished',
-  lettingType: 'sfsgfsafd',
-  minTerm: 'ssdsdfds',
-  contractLength: 'fgawgwr',
-  deposit: '13211233',
-  price: 0,
-  currency: '£',
-  payable: 'weekly',
-  type: 'adads',
-  status: 'available',
-  ytLink: 'ahdsiaduhiqh'
-};
+const bathBedOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 function NewPropertyForm() {
   const [state, setState] = useState<IState>(initialState);
@@ -80,11 +44,9 @@ function NewPropertyForm() {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, id: 'payable' | 'status' | 'furnishingType') => {
     setState({ ...state, [id]: event.target.value });
   };
-  const bathroomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const bedroomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   const handleValidation = () => {
-    const requiredFields = ['title', 'postcode', 'description', 'price', 'payable', 'status'];
+    const requiredFields = ['title', 'postcode', 'description', 'price', 'payable', 'status', 'currency'];
     let isPass = true;
     requiredFields.forEach(item => {
       if (state[item] === '') {
@@ -95,9 +57,9 @@ function NewPropertyForm() {
   };
 
   const handleFileChange = (event: any) => {
-    const files = event.target.files[0];
+    const file = event.target.files[0];
     const formData = new FormData();
-    formData.append('file', files);
+    formData.append('image', file);
     dispatch(
       uploadImage({
         image: formData,
@@ -109,7 +71,7 @@ function NewPropertyForm() {
         }
       })
     );
-    setSelectedFiles((prevFiles): any => [...prevFiles, formData.get('file')]);
+    setSelectedFiles((prevFiles): any => [...prevFiles, formData.get('image')]);
   };
 
   const handleSubmit = () => {
@@ -198,14 +160,14 @@ function NewPropertyForm() {
                 id="outlined-required"
                 label={messages.propInfo.label.area}
                 value={state.area}
-                onChange={e => setState({ ...state, area: Number(e.target.value) })}
+                onChange={e => setState({ ...state, area: Number(e.target.value) > 0 ? Number(e.target.value) : 0 })}
               />
               <TextField
                 id="outlined-required"
                 type="number"
                 label={messages.propInfo.label.floor}
                 value={state.floor}
-                onChange={e => setState({ ...state, floor: Number(e.target.value) })}
+                onChange={e => setState({ ...state, floor: Number(e.target.value) > 0 ? Number(e.target.value) : 0 })}
               />
               <TextField
                 id=""
@@ -214,7 +176,7 @@ function NewPropertyForm() {
                 value={state.bathroom}
                 onChange={e => setState({ ...state, bathroom: Number(e.target.value) })}
               >
-                {bathroomOptions.map(item => (
+                {bathBedOptions.map(item => (
                   <MenuItem value={item}>{item}</MenuItem>
                 ))}
               </TextField>
@@ -225,7 +187,7 @@ function NewPropertyForm() {
                 value={state.bedroom}
                 onChange={e => setState({ ...state, bedroom: Number(e.target.value) })}
               >
-                {bedroomOptions.map(item => (
+                {bathBedOptions.map(item => (
                   <MenuItem value={item}>{item}</MenuItem>
                 ))}
               </TextField>
@@ -289,7 +251,9 @@ function NewPropertyForm() {
                 id="outlined-required"
                 label={messages.contractInfo.label.deposit}
                 value={state.deposit}
-                onChange={e => setState({ ...state, deposit: e.target.value })}
+                onChange={e => {
+                  setState({ ...state, deposit: e.target.value });
+                }}
               />
             </Box>
           </CardContent>
