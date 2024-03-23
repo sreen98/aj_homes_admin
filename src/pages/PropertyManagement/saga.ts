@@ -38,8 +38,7 @@ export function* createProperty(data: RequestSagaParams) {
 
 export function* uploadImage(data: RequestSagaParams) {
   try {
-    const response: ResponseGenerator = yield call(Endpoints.uploadImage, data.payload);
-    console.log('🚀 ~ function*uploadImage ~ response:', response);
+    const response: ResponseGenerator = yield call(Endpoints.uploadImage, data.payload.image);
     yield put(Actions.uploadImageSuccess(response?.data));
     if (data.payload.callback) {
       data.payload.callback(response?.data?.imageUrl);
