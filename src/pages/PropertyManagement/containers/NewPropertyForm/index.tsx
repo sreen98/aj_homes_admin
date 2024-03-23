@@ -380,7 +380,7 @@ function NewPropertyForm() {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={2} sx={{ alignContent: 'center', display: 'flex', justifyContent: 'center' }}>
         <Button onClick={handleSubmit} variant="contained" color="primary" size="large">
           {messages.button.submit}
         </Button>

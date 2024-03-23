@@ -27,10 +27,12 @@ const PropertyCard = ({ properties, onOpenModal }: IPropertyCardProps) => {
   return (
     <>
       {properties.map(item => {
+        const imageUrl =
+          Array.isArray(item.images) && item?.images.length > 0 ? item.images[0] : 'https://placehold.co/600x400';
         return (
           <Grid item xs={2} sm={4} md={4} key={item._id}>
             <Card sx={{ maxWidth: 345, minHeight: 300 }}>
-              <CardMedia sx={{ height: 140 }} image={item.image ?? 'https://placehold.co/600x400'} />
+              <CardMedia sx={{ height: 140 }} image={imageUrl} />
               <CardContent sx={{ maxHeight: 150 }}>
                 <Typography gutterBottom variant="h5" component="div">
                   {getTitle({ title: item.title, status: item.status })}
