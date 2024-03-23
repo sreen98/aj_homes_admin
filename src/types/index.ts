@@ -62,7 +62,7 @@ export interface ICreatePropertyPayload {
 export interface IProperty {
   _id: string;
   title: string;
-  image?: string;
+  images?: string[];
   reference: string;
   postcode: string;
   description: string;
