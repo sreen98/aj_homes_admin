@@ -3,6 +3,7 @@ export interface IState {
   reference: string;
   postcode: string;
   description: string;
+  address: string;
   area: number;
   floor: number;
   bathroom: number;
@@ -14,12 +15,12 @@ export interface IState {
   contractLength: string;
   deposit: string;
   price: number;
-  currency: string,
+  currency: string;
   payable: string;
   type: string;
   status: string;
   ytLink: string;
   mapLink: string;
   images: string[];
-  [key: string]: string | number |  string[];
+  [key: string]: string | number | string[];
 }
