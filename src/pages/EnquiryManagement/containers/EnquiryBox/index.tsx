@@ -97,7 +97,7 @@ const getTableBody = (
             }}
             color="inherit"
             size="small"
-            onClick={() => handleMarkAsRead(enquiry?._id)}
+            onClick={() => handleMarkAsRead(enquiry?.id)}
             disabled={enquiry.status === 'contacted'}
           >
             <DoneOutlinedIcon fontSize="small" />
@@ -123,6 +123,8 @@ const EnquiryTable: FC<EnquiryTableProps> = ({ enquiries, onFilterChange, onActi
   const theme = useTheme();
 
   const handleIconClick = (type: 'update' | 'view', id: string) => {
+    console.log('🚀 ~ handleIconClick ~ handleIconClick:', id);
+
     onAction('view', id);
   };
 
