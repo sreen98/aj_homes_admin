@@ -42,8 +42,12 @@ const messages = {
       status: 'Please select  status'
     }
   },
+  imageUpload: {
+    title: 'Edit Images'
+  },
   button: {
-    submit: 'Submit'
+    submit: 'Submit',
+    uploadFile: 'Upload File'
   }
 };
 

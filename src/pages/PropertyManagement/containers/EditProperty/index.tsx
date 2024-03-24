@@ -6,10 +6,12 @@ import MenuItem from '@mui/material/MenuItem';
 import messages from './messages';
 import { IState } from './types';
 import { contractOptions, payableOptions, statusOptions } from 'config';
-import { updateProperty, getPropertyDetails } from 'pages/PropertyManagement/slice';
+import { updateProperty, getPropertyDetails, uploadImage } from 'pages/PropertyManagement/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import * as Selectors from '../../selectors';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const initialState = {
   title: '',
@@ -31,7 +33,8 @@ const initialState = {
   type: '',
   status: '',
   ytLink: '',
-  mapLink: ''
+  mapLink: '',
+  images: []
 };
 
 const stateSelector = createStructuredSelector({
@@ -46,6 +49,7 @@ function EditPropertyForm({ propId }: any) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, id: 'payable' | 'status' | 'furnishingType') => {
     setState({ ...state, [id]: event.target.value });
   };
+  const [hoveredIndex, setHoveredIndex] = useState<null | number>(null);
 
   const handleValidation = () => {
     const requiredFields = ['title', 'postcode', 'description', 'price', 'payable', 'status'];
@@ -62,6 +66,28 @@ function EditPropertyForm({ propId }: any) {
     if (isValidForm) {
       dispatch(updateProperty({ id: propId, state }));
     }
+  };
+
+  const handleFileChange = (event: any) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+    dispatch(
+      uploadImage({
+        image: formData,
+        callback: (imgUrl: string): void => {
+          setState((prevState: any) => ({
+            ...prevState,
+            images: [...prevState.images, imgUrl]
+          }));
+        }
+      })
+    );
+  };
+
+  const handleRemoveImage = (urlToRemove: string) => {
+    const filteredImages = state.images.filter(url => url !== urlToRemove);
+    setState({ ...state, images: filteredImages });
   };
 
   useEffect(() => {
@@ -91,7 +117,8 @@ function EditPropertyForm({ propId }: any) {
       type: propertyData.type,
       status: propertyData.status,
       ytLink: propertyData.ytLink,
-      mapLink: propertyData.mapLink
+      mapLink: propertyData.mapLink,
+      images: propertyData.images
     });
   }, [property]);
 
@@ -326,15 +353,70 @@ function EditPropertyForm({ propId }: any) {
           </CardContent>
         </Card>
       </Grid>
+      <Grid item xs={12}>
+        <Card>
+          <CardHeader title={messages.imageUpload.title} />
+          <Divider />
+          <Grid container spacing={3} sx={{ padding: '2rem 0 2rem 0' }}>
+            {state.images?.map((imageUrl, index) => (
+              <Grid item xs={4} key={index}>
+                <div
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                >
+                  <img
+                    src={imageUrl}
+                    alt={`Preview ${index + 1}`}
+                    style={{ width: '300px', height: '200px', objectFit: 'fill' }}
+                  />
+                  {hoveredIndex === index && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        height: '30px',
+                        width: '30px',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        background: 'rgba(0, 0, 0, 0.5)'
+                      }}
+                    >
+                      <DeleteIcon style={{ color: 'white' }} onClick={() => handleRemoveImage(imageUrl)} />
+                    </div>
+                  )}
+                </div>
+              </Grid>
+            ))}
+          </Grid>
+          <Grid item xs={12} mb={6}>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25rem' },
+                '& .MuiFormControl-fullWidth': { m: 1, width: '77rem' }
+              }}
+              noValidate
+              autoComplete="off"
+              style={{ textAlign: 'center' }}
+            >
+              <Button
+                component="label"
+                role={undefined}
+                variant="contained"
+                tabIndex={-1}
+                startIcon={<CloudUploadIcon />}
+              >
+                {messages.button.uploadFile}
+                <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
+              </Button>
+            </Box>
+          </Grid>
+        </Card>
+      </Grid>
 
-      <Grid item xs={2}>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          color="primary"
-          size="small"
-          // startIcon={<AddIcon fontSize="small" />}
-        >
+      <Grid item xs={12} sx={{ alignContent: 'center', display: 'flex', justifyContent: 'center' }}>
+        <Button onClick={handleSubmit} variant="contained" color="primary" size="small">
           {messages.button.submit}
         </Button>
       </Grid>
