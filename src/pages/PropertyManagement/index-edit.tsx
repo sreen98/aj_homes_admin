@@ -11,7 +11,7 @@ export default function PropertyEditManagement() {
 
   return (
     <Container maxWidth="xl" sx={{ marginBottom: '2rem' }}>
-      <PageTitle heading={messages.new.heading} showBack />
+      <PageTitle heading={messages.new.editHeading} showBack />
       <EditPropertyForm propId={propId}></EditPropertyForm>
     </Container>
   );

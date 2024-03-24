@@ -19,5 +19,6 @@ export interface IState {
   status: string;
   ytLink: string;
   mapLink: string;
-  [key: string]: string | number;
+  images: string[];
+  [key: string]: string | number | string[];
 }
