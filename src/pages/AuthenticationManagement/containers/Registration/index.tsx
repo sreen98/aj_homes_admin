@@ -15,7 +15,6 @@ import messages from './messages';
 export default function Registration() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
   };
 
   return (

@@ -3,8 +3,7 @@ import { Container, Grid, Typography, Paper, Button, Divider, Card, Link } from 
 import PageTitle from 'components/PageTitle';
 import {
   Bathtub as BathtubIcon,
-  KingBed as KingBedIcon,
-  Nature as NatureIcon
+  KingBed as KingBedIcon
   // Playground as PlaygroundIcon,
 } from '@mui/icons-material';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
@@ -14,7 +13,6 @@ import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import SavingsIcon from '@mui/icons-material/Savings';
-import messages from './messages';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPropertyDetails } from './slice';

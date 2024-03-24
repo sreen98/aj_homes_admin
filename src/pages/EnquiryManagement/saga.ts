@@ -2,14 +2,15 @@ import { SagaIterator } from '@redux-saga/core';
 import { all, takeLatest, put, call } from 'redux-saga/effects';
 import * as Endpoints from './endpoints';
 import { errorHandlerSaga, statusHandlerSaga } from 'utils';
+import { RequestSagaParams, ResponseGenerator } from 'types';
 
 import * as Actions from './slice';
-import { RequestSagaParams, ResponseGenerator } from 'types';
+import { getMappedEnquiries } from './mappings';
 
 export function* getAllEnquiries(data: RequestSagaParams) {
   try {
     const response: ResponseGenerator = yield call(Endpoints.getAllEnquiries, data.payload);
-    yield put(Actions.getAllEnquiriesSuccess(response.data.data));
+    yield put(Actions.getAllEnquiriesSuccess(getMappedEnquiries(response.data.data)));
   } catch (error: any) {
     yield call(errorHandlerSaga, error, Actions.getAllEnquiriesFailed);
   }

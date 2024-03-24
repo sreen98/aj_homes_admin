@@ -6,14 +6,17 @@ export interface EnquiryManagementState {
   error: string;
 }
 
-export interface IEnquiry {
-  _id?: string; // Need to reconfirm
-  id: string;
+export interface IEnquiryResponse {
+  _id: string;
   propertyTitle?: string;
   name: string;
   emailId: string;
-  propertyId: string;
+  propertyId?: string;
   subject: string;
   status: IEnquireStatus;
   message: string;
 }
+
+export type IEnquiry = Omit<IEnquiryResponse, '_id'> & {
+  id: string;
+};

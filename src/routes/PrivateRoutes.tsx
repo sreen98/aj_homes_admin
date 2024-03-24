@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { hasLoginAccess } from 'utils';
 
 export const PrivateRoute = ({
   component: Component,
@@ -9,7 +8,6 @@ export const PrivateRoute = ({
   isAuthenticated,
   ...rest
 }: any): any => {
-  // const isLoggedIn = hasLoginAccess('isAdminLoggedIn');
   const isLoggedIn = true;
   return (
     <Route
