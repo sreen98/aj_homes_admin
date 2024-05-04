@@ -11,6 +11,7 @@ export interface IEnquiryResponse {
   propertyTitle?: string;
   name: string;
   emailId: string;
+  phoneNumber?: string;
   propertyId?: string;
   subject: string;
   status: IEnquireStatus;

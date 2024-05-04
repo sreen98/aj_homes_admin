@@ -5,6 +5,7 @@ export const Env = {
   NODE_ENV: process.env.NODE_ENV,
   API_BASE_URL: process.env.REACT_APP_API_BASE_URL,
   MSW_ENABLED: process.env.REACT_APP_MSW_ENABLED,
+  MAP_API_KEY: process.env.REACT_APP_MAP_API_KEY,
 
   isProd() {
     return this.NODE_ENV === 'production';

@@ -20,6 +20,7 @@ import { createStructuredSelector } from 'reselect';
 import * as Selectors from './selectors';
 import ReactPlayer from 'react-player';
 
+const mapkey = process.env.REACT_APP_MAP_API_KEY;
 const stateSelector = createStructuredSelector({
   property: Selectors.makeSelectPropertyData()
 });
@@ -47,6 +48,25 @@ const ProductDetailsPage = () => {
       return newIndex;
     });
   };
+
+  const MapComponent = ({ mapLink }: any) => {
+    const placeName = mapLink?.split('/place/')[1]?.split('/@')[0];
+    const encodedPlaceName = encodeURIComponent(placeName);
+    const embedUrl = `https://www.google.com/maps/embed/v1/place?key=${mapkey}&q=${encodedPlaceName}`;
+    return (
+      <iframe
+        title="Location Map"
+        width="100%"
+        height="400"
+        loading="lazy"
+        frameBorder="0"
+        style={{ border: 0 }}
+        src={embedUrl}
+        allowFullScreen
+      />
+    );
+  };
+
   return (
     <Container maxWidth="xl" sx={{ marginTop: '2rem', marginBottom: '2rem' }}>
       <PageTitle heading={property?.title} showBack />
@@ -232,6 +252,11 @@ const ProductDetailsPage = () => {
           </Paper>
         </Grid>
       </Grid>
+      {property.mapLink && (
+        <Grid item xs={12} md={8} padding="40px">
+          <MapComponent mapLink={property?.mapLink} />
+        </Grid>
+      )}
     </Container>
   );
 };
