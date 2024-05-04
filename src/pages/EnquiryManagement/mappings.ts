@@ -6,6 +6,7 @@ export const getMappedEnquiries = (enquiries: IEnquiryResponse[]): IEnquiry[] =>
     ...(enq.propertyTitle && { propertyTitle: enq.propertyTitle }),
     name: enq.name,
     emailId: enq.emailId,
+    phoneNumber: enq.phoneNumber,
     ...(enq.propertyId && { propertyId: enq.propertyId }),
     subject: enq.subject,
     status: enq.status,

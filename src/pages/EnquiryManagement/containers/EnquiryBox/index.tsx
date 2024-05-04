@@ -72,6 +72,11 @@ const getTableBody = (
           {enquiry.emailId}
         </Typography>
       </TableCell>
+      <TableCell>
+        <Typography variant="body1" fontWeight="bold" color="text.primary" gutterBottom noWrap>
+          {enquiry?.phoneNumber}
+        </Typography>
+      </TableCell>
       <TableCell align="center">{getStatusLabel(enquiry.status)}</TableCell>
       <TableCell align="right">
         <Tooltip title={messages.tooltip.view} arrow>

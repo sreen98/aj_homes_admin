@@ -81,6 +81,10 @@ export const tableHeaders: ITableHeader[] = [
     align: 'left'
   },
   {
+    name: 'Phone Number',
+    align: 'center'
+  },
+  {
     name: 'Status',
     align: 'center'
   },
