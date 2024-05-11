@@ -128,8 +128,6 @@ const EnquiryTable: FC<EnquiryTableProps> = ({ enquiries, onFilterChange, onActi
   const theme = useTheme();
 
   const handleIconClick = (type: 'update' | 'view', id: string) => {
-    console.log('🚀 ~ handleIconClick ~ handleIconClick:', id);
-
     onAction('view', id);
   };
 

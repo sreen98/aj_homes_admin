@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Grid, Card, CardHeader, CardContent, Divider, Button } from '@mui/material';
+import { Grid, Card, CardHeader, CardContent, Divider, Button, ThemeProvider, createTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,6 +9,9 @@ import { contractOptions, payableOptions, statusOptions } from 'config';
 import { createProperty, uploadImage } from 'pages/PropertyManagement/slice';
 import { useDispatch } from 'react-redux';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import MUIRichTextEditor from 'mui-rte';
+import { stateToHTML } from 'draft-js-export-html';
+import { textEditorTheme } from 'theme';
 
 const initialState = {
   title: '',
@@ -36,6 +39,14 @@ const initialState = {
   images: []
 };
 const bathBedOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const editorStyles = {
+  width: '77rem', // Adjust width as needed
+  height: '300px', // Adjust height as needed
+  border: '1px solid #ccc', // Adjust border style as needed
+  borderRadius: '5px', // Adjust border radius as needed
+  paddingLeft: '20px', // Adjust padding as needed
+  marginLeft: '10px'
+};
 
 function NewPropertyForm() {
   const [state, setState] = useState<IState>(initialState);
@@ -43,6 +54,11 @@ function NewPropertyForm() {
   const dispatch = useDispatch();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, id: 'payable' | 'status' | 'furnishingType') => {
     setState({ ...state, [id]: event.target.value });
+  };
+
+  const handelOnChangeRTE = (value: any) => {
+    stateToHTML(value.getCurrentContent());
+    setState({ ...state, description: stateToHTML(value.getCurrentContent()) });
   };
 
   const handleValidation = () => {
@@ -123,19 +139,31 @@ function NewPropertyForm() {
                 multiline
                 fullWidth
                 id="outlined-textarea"
-                label={messages.basicInfo.label.description}
-                value={state.description}
-                onChange={e => setState({ ...state, description: e.target.value })}
-              />
-              <TextField
-                required
-                multiline
-                fullWidth
-                id="outlined-textarea"
                 label={messages.basicInfo.label.address}
                 value={state.address}
                 onChange={e => setState({ ...state, address: e.target.value })}
               />
+
+              <ThemeProvider theme={textEditorTheme}>
+                <div style={editorStyles}>
+                  <MUIRichTextEditor
+                    label="Description"
+                    onChange={value => handelOnChangeRTE(value)}
+                    controls={[
+                      'bold',
+                      'italic',
+                      'underline',
+                      'link',
+                      'strikethrough',
+                      'undo',
+                      'redo',
+                      'numberList',
+                      'bulletList',
+                      'clear'
+                    ]}
+                  />
+                </div>
+              </ThemeProvider>
             </Box>
           </CardContent>
         </Card>

@@ -2,6 +2,7 @@ export interface IState {
   title: string;
   reference: string;
   postcode: string;
+  address: string;
   description: string;
   area: number;
   floor: number;
