@@ -48,7 +48,7 @@ const PropertyCard = ({ properties, onOpenModal }: IPropertyCardProps) => {
                     WebkitLineClamp: 2
                   }}
                 >
-                  {item.description}
+                  {item.address}
                 </Typography>
               </CardContent>
               <CardActions>

@@ -11,6 +11,7 @@ export interface IProperty {
   image?: string;
   reference: string;
   postcode: string;
+  address: string;
   description: string;
   area: number;
   floor: number;
