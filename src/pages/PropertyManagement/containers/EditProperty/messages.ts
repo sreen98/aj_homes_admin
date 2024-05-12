@@ -4,8 +4,11 @@ const messages = {
     label: {
       title: 'Title',
       description: 'Description',
+      descriptionHelpText:
+        'Please copy paste the description from above and modify as required. If no changes needed, please ignore this field.',
       reference: 'Reference',
-      postcode: 'Post Code'
+      postcode: 'Post Code',
+      address: 'Address'
     }
   },
   propInfo: {

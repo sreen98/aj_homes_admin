@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Grid, Card, CardHeader, CardContent, Divider, Button } from '@mui/material';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Grid, Card, CardHeader, CardContent, Divider, Button, ThemeProvider, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,12 +12,17 @@ import { createStructuredSelector } from 'reselect';
 import * as Selectors from '../../selectors';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { textEditorTheme } from 'theme';
+import MUIRichTextEditor from 'mui-rte';
+import { stateToHTML } from 'draft-js-export-html';
+import ReactHtmlParser from 'react-html-parser';
 
 const initialState = {
   title: '',
   reference: '',
   postcode: '',
   description: '',
+  address: '',
   area: 0,
   floor: 0,
   bathroom: 0,
@@ -36,6 +41,14 @@ const initialState = {
   mapLink: '',
   images: []
 };
+const editorStyles = {
+  width: '77rem',
+  height: '300px',
+  border: '1px solid #ccc',
+  borderRadius: '5px',
+  paddingLeft: '20px',
+  marginLeft: '10px'
+};
 
 const stateSelector = createStructuredSelector({
   property: Selectors.makeSelectPropertyData()
@@ -43,9 +56,44 @@ const stateSelector = createStructuredSelector({
 
 function EditPropertyForm({ propId }: any) {
   const { property }: any = useSelector(stateSelector);
-
   const [state, setState] = useState<IState>(initialState);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getPropertyDetails(propId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propId]);
+
+  useEffect(() => {
+    setState({
+      title: property.title,
+      reference: property.reference,
+      postcode: property.postcode,
+      description: property.description,
+      address: property.address,
+      area: property.area,
+      floor: property.floor,
+      bathroom: property.bathroom,
+      bedroom: property.bedroom,
+      tenure: property.tenure,
+      furnishingType: property.furnishingType,
+      lettingType: property.lettingType,
+      minTerm: property.minTerm,
+      contractLength: property.contractLength,
+      deposit: property.deposit,
+      price: property.price,
+      payable: property.payable,
+      type: property.type,
+      status: property.status,
+      ytLink: property.ytLink,
+      mapLink: property.mapLink,
+      images: property.images
+    });
+    return () => {
+      setState(initialState);
+    };
+  }, [property]);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, id: 'payable' | 'status' | 'furnishingType') => {
     setState({ ...state, [id]: event.target.value });
   };
@@ -90,37 +138,9 @@ function EditPropertyForm({ propId }: any) {
     setState({ ...state, images: filteredImages });
   };
 
-  useEffect(() => {
-    dispatch(getPropertyDetails(propId));
-  }, [propId]);
-
-  useEffect(() => {
-    const propertyData = property;
-
-    setState({
-      title: propertyData.title,
-      reference: propertyData.reference,
-      postcode: propertyData.postcode,
-      description: propertyData.description,
-      area: propertyData.area,
-      floor: propertyData.floor,
-      bathroom: propertyData.bathroom,
-      bedroom: propertyData.bedroom,
-      tenure: propertyData.tenure,
-      furnishingType: propertyData.furnishingType,
-      lettingType: propertyData.lettingType,
-      minTerm: propertyData.minTerm,
-      contractLength: propertyData.contractLength,
-      deposit: propertyData.deposit,
-      price: propertyData.price,
-      payable: propertyData.payable,
-      type: propertyData.type,
-      status: propertyData.status,
-      ytLink: propertyData.ytLink,
-      mapLink: propertyData.mapLink,
-      images: propertyData.images
-    });
-  }, [property]);
+  const handelOnChangeRTE = (value: any) => {
+    setState({ ...state, description: stateToHTML(value.getCurrentContent()) });
+  };
 
   return (
     <Grid container direction="row" justifyContent="center" alignItems="stretch" spacing={3}>
@@ -161,13 +181,36 @@ function EditPropertyForm({ propId }: any) {
               />
               <TextField
                 required
-                multiline
-                fullWidth
-                id="outlined-textarea"
-                label={messages.basicInfo.label.description}
-                value={state.description}
-                onChange={e => setState({ ...state, description: e.target.value })}
+                id="outlined-required"
+                label={messages.basicInfo.label.address}
+                value={state.address}
+                onChange={e => setState({ ...state, address: e.target.value })}
               />
+              <div style={editorStyles}>
+                <Typography>{messages.basicInfo.label.description}</Typography>
+                {ReactHtmlParser(property?.description)}
+              </div>
+
+              <ThemeProvider theme={textEditorTheme}>
+                <div style={editorStyles}>
+                  <MUIRichTextEditor
+                    label={messages.basicInfo.label.descriptionHelpText}
+                    onChange={value => handelOnChangeRTE(value)}
+                    controls={[
+                      'bold',
+                      'italic',
+                      'underline',
+                      'link',
+                      'strikethrough',
+                      'undo',
+                      'redo',
+                      'numberList',
+                      'bulletList',
+                      'clear'
+                    ]}
+                  />
+                </div>
+              </ThemeProvider>
             </Box>
           </CardContent>
         </Card>

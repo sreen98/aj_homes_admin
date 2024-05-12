@@ -1,4 +1,4 @@
-import { alpha, lighten, darken } from '@mui/material';
+import { alpha, lighten, darken, createTheme } from '@mui/material';
 // import '@mui/lab/themeAugmentation';
 
 const themeColors = {
@@ -1401,3 +1401,14 @@ export const defaultTheme = {
   },
   spacing: 8
 };
+
+export const textEditorTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#1976d2' // Adjust primary color as needed
+    }
+  },
+  typography: {
+    fontFamily: 'Arial, sans-serif' // Adjust font family as needed
+  }
+});

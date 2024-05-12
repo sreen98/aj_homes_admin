@@ -19,15 +19,18 @@ import { getPropertyDetails } from './slice';
 import { createStructuredSelector } from 'reselect';
 import * as Selectors from './selectors';
 import ReactPlayer from 'react-player';
+import ReactHtmlParser from 'react-html-parser';
+import { LoadingIndicator } from 'components';
 
 const mapkey = process.env.REACT_APP_MAP_API_KEY;
 const stateSelector = createStructuredSelector({
-  property: Selectors.makeSelectPropertyData()
+  property: Selectors.makeSelectPropertyData(),
+  loading: Selectors.makeSelectPropertiesLoading()
 });
 
 const ProductDetailsPage = () => {
   const { propId }: any = useParams();
-  const { property }: any = useSelector(stateSelector);
+  const { property, loading }: any = useSelector(stateSelector);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -70,6 +73,7 @@ const ProductDetailsPage = () => {
   return (
     <Container maxWidth="xl" sx={{ marginTop: '2rem', marginBottom: '2rem' }}>
       <PageTitle heading={property?.title} showBack />
+      {loading && <LoadingIndicator visible={loading} />}
 
       <Grid
         item
@@ -146,7 +150,7 @@ const ProductDetailsPage = () => {
             <Typography variant="h5" gutterBottom>
               Description
             </Typography>
-            <Typography paragraph>{property?.description}</Typography>
+            <div>{ReactHtmlParser(property?.description)}</div>
             <Typography variant="h5" gutterBottom>
               Address
             </Typography>

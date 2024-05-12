@@ -78,6 +78,7 @@ export const PropertyInitialState = {
   image: '',
   reference: '',
   postcode: '',
+  address: '',
   description: '',
   area: 0,
   floor: 0,
