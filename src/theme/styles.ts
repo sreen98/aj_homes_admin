@@ -1,4 +1,4 @@
-import { alpha, lighten, darken, createTheme } from '@mui/material';
+import { alpha, lighten, darken } from '@mui/material';
 // import '@mui/lab/themeAugmentation';
 
 const themeColors = {
@@ -1250,7 +1250,7 @@ export const defaultTheme = {
     }
   },
   typography: {
-    fontFamily: 'Avenir Next',
+    fontFamily: 'sans-serif',
     fontSize: 14,
     fontWeightRegular: 400,
     fontWeightMedium: 500,
@@ -1399,16 +1399,42 @@ export const defaultTheme = {
       dark: darken(themeColors.info, 0.2)
     }
   },
-  spacing: 8
-};
+  spacing: 8,
+  overrides: {
+    MUIRichTextEditor: {
+      root: {
+        width: '77rem',
+        border: '1px solid #ccc',
+        borderRadius: '5px',
+        paddingLeft: '20px',
+        marginLeft: '10px'
+      },
+      container: {
+        display: 'flex',
+        width: '77rem',
+        height: '300px',
 
-export const textEditorTheme = createTheme({
-  palette: {
-    primary: {
-      main: '#1976d2' // Adjust primary color as needed
+        flexDirection: 'column-reverse'
+      },
+      editor: {
+        height: '300px',
+        width: '77rem',
+        maxHeight: '300px',
+
+        overflow: 'auto'
+      },
+      toolbar: {
+        borderTop: '0.5px solid gray',
+        width: '74rem'
+      },
+      placeHolder: {
+        width: '77rem',
+        paddingLeft: '5px'
+      },
+      anchorLink: {
+        color: '#333333',
+        textDecoration: 'underline'
+      }
     }
-  },
-  typography: {
-    fontFamily: 'Arial, sans-serif' // Adjust font family as needed
   }
-});
+};

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { localRedirect } from 'utils';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL || 'https://jsonplaceholder.typicode.com/';
-const refreshEndpoint = process.env.REACT_APP_API_REFRESH_URL || 'localhost';
+// const refreshEndpoint = process.env.REACT_APP_API_REFRESH_URL || 'localhost';
 const api = axios.create({
   baseURL: baseUrl
 });

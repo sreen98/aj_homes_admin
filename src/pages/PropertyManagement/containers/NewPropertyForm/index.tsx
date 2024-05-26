@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Grid, Card, CardHeader, CardContent, Divider, Button, ThemeProvider, createTheme } from '@mui/material';
+import { Grid, Card, CardHeader, CardContent, Divider, Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,9 +9,9 @@ import { contractOptions, payableOptions, statusOptions } from 'config';
 import { createProperty, uploadImage } from 'pages/PropertyManagement/slice';
 import { useDispatch } from 'react-redux';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DeleteIcon from '@mui/icons-material/Delete';
 import MUIRichTextEditor from 'mui-rte';
 import { stateToHTML } from 'draft-js-export-html';
-import { textEditorTheme } from 'theme';
 
 const initialState = {
   title: '',
@@ -39,14 +39,6 @@ const initialState = {
   images: []
 };
 const bathBedOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const editorStyles = {
-  width: '77rem', // Adjust width as needed
-  height: '300px', // Adjust height as needed
-  border: '1px solid #ccc', // Adjust border style as needed
-  borderRadius: '5px', // Adjust border radius as needed
-  paddingLeft: '20px', // Adjust padding as needed
-  marginLeft: '10px'
-};
 
 function NewPropertyForm() {
   const [state, setState] = useState<IState>(initialState);
@@ -55,6 +47,7 @@ function NewPropertyForm() {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, id: 'payable' | 'status' | 'furnishingType') => {
     setState({ ...state, [id]: event.target.value });
   };
+  const [hoveredIndex, setHoveredIndex] = useState<null | number>(null);
 
   const handelOnChangeRTE = (value: any) => {
     stateToHTML(value.getCurrentContent());
@@ -88,6 +81,13 @@ function NewPropertyForm() {
       })
     );
     setSelectedFiles((prevFiles): any => [...prevFiles, formData.get('image')]);
+  };
+
+  const handleRemoveImage = (imageIndex: number) => {
+    const filteredImages = state.images.filter((_, index) => index !== imageIndex);
+    const filteredSelectedFiles = selectedFiles.filter((_, index) => index !== imageIndex);
+    setSelectedFiles(filteredSelectedFiles);
+    setState({ ...state, images: filteredImages });
   };
 
   const handleSubmit = () => {
@@ -144,26 +144,22 @@ function NewPropertyForm() {
                 onChange={e => setState({ ...state, address: e.target.value })}
               />
 
-              <ThemeProvider theme={textEditorTheme}>
-                <div style={editorStyles}>
-                  <MUIRichTextEditor
-                    label="Description"
-                    onChange={value => handelOnChangeRTE(value)}
-                    controls={[
-                      'bold',
-                      'italic',
-                      'underline',
-                      'link',
-                      'strikethrough',
-                      'undo',
-                      'redo',
-                      'numberList',
-                      'bulletList',
-                      'clear'
-                    ]}
-                  />
-                </div>
-              </ThemeProvider>
+              <MUIRichTextEditor
+                label="Description"
+                onChange={value => handelOnChangeRTE(value)}
+                controls={[
+                  'bold',
+                  'italic',
+                  'underline',
+                  'link',
+                  'strikethrough',
+                  'undo',
+                  'redo',
+                  'numberList',
+                  'bulletList',
+                  'clear'
+                ]}
+              />
             </Box>
           </CardContent>
         </Card>
@@ -372,14 +368,34 @@ function NewPropertyForm() {
           <CardHeader title={messages.imageUpload.title} />
           <Divider />
           <Grid container spacing={3} sx={{ margin: '2rem', width: '100%', height: '100%' }}>
-            {selectedFiles.map((file, index) => (
-              <Grid item xs={3} key={index}>
-                {' '}
-                <img
-                  src={URL.createObjectURL(file)}
-                  alt={`Preview ${index + 1}`}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
+            {selectedFiles?.map((file, index) => (
+              <Grid item xs={4} key={index}>
+                <div
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                >
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={`Preview ${index + 1}`}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                  {hoveredIndex === index && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        height: '30px',
+                        width: '30px',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        background: 'rgba(0, 0, 0, 0.5)'
+                      }}
+                    >
+                      <DeleteIcon style={{ color: 'white' }} onClick={() => handleRemoveImage(index)} />
+                    </div>
+                  )}
+                </div>
               </Grid>
             ))}
           </Grid>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Grid, Card, CardHeader, CardContent, Divider, Button, ThemeProvider, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Grid, Card, CardHeader, CardContent, Divider, Button, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,7 +12,6 @@ import { createStructuredSelector } from 'reselect';
 import * as Selectors from '../../selectors';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { textEditorTheme } from 'theme';
 import MUIRichTextEditor from 'mui-rte';
 import { stateToHTML } from 'draft-js-export-html';
 import ReactHtmlParser from 'react-html-parser';
@@ -43,11 +42,13 @@ const initialState = {
 };
 const editorStyles = {
   width: '77rem',
-  height: '300px',
+  height: '500px',
   border: '1px solid #ccc',
   borderRadius: '5px',
   paddingLeft: '20px',
-  marginLeft: '10px'
+  marginLeft: '10px',
+  overflow: 'auto',
+  marginBottom: '20px'
 };
 
 const stateSelector = createStructuredSelector({
@@ -191,26 +192,22 @@ function EditPropertyForm({ propId }: any) {
                 {ReactHtmlParser(property?.description)}
               </div>
 
-              <ThemeProvider theme={textEditorTheme}>
-                <div style={editorStyles}>
-                  <MUIRichTextEditor
-                    label={messages.basicInfo.label.descriptionHelpText}
-                    onChange={value => handelOnChangeRTE(value)}
-                    controls={[
-                      'bold',
-                      'italic',
-                      'underline',
-                      'link',
-                      'strikethrough',
-                      'undo',
-                      'redo',
-                      'numberList',
-                      'bulletList',
-                      'clear'
-                    ]}
-                  />
-                </div>
-              </ThemeProvider>
+              <MUIRichTextEditor
+                label={messages.basicInfo.label.descriptionHelpText}
+                onChange={value => handelOnChangeRTE(value)}
+                controls={[
+                  'bold',
+                  'italic',
+                  'underline',
+                  'link',
+                  'strikethrough',
+                  'undo',
+                  'redo',
+                  'numberList',
+                  'bulletList',
+                  'clear'
+                ]}
+              />
             </Box>
           </CardContent>
         </Card>
