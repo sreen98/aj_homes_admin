@@ -35,6 +35,7 @@ const ProductDetailsPage = () => {
 
   useEffect(() => {
     dispatch(getPropertyDetails(propId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propId]);
 
   const [slideIndex, setSlideIndex] = useState(1);
@@ -219,6 +220,7 @@ const ProductDetailsPage = () => {
             ) : (
               <img
                 style={{ width: '100%', height: '100%' }}
+                alt="Failed to Load"
                 src="https://www.47pitches.com/contents/images/no-video.jpg"
               />
             )}
