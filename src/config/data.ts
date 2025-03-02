@@ -1,3 +1,5 @@
+import { ISideBarListItem } from 'types';
+
 export const statusOptions = [
   {
     value: 'Available Immediately',
@@ -10,10 +12,6 @@ export const statusOptions = [
   {
     value: 'Let - Agreed',
     label: 'Let - Agreed'
-  },
-  {
-    value: 'Let - Unavailable',
-    label: 'Let - Unavailable'
   },
   {
     value: 'Sold',
@@ -59,12 +57,43 @@ export const contractOptions = [
   }
 ];
 
-export const mainList: {
-  [key: string]: string;
-}[] = [
+export const categoryOptions = [
+  {
+    value: 'forSale',
+    label: 'For Sale'
+  },
+  {
+    value: 'studentLettings',
+    label: 'Student Lettings'
+  },
+  {
+    value: 'residentialLettings',
+    label: 'Residential Lettings'
+  }
+];
+
+export const mainList: ISideBarListItem[] = [
   {
     id: 'properties',
-    name: 'Properties'
+    name: 'Properties',
+    subList: [
+      {
+        id: 'all',
+        name: 'All'
+      },
+      {
+        id: 'forSale',
+        name: 'For Sale'
+      },
+      {
+        id: 'studentLettings',
+        name: 'Student Lettings'
+      },
+      {
+        id: 'residentialLettings',
+        name: 'Residential Lettings'
+      }
+    ]
   },
   {
     id: 'enquiries',
@@ -95,5 +124,8 @@ export const PropertyInitialState = {
   type: '',
   status: '',
   ytLink: '',
-  mapLink: ''
+  mapLink: '',
+  isFeatured: false,
+  moveInDate: '',
+  category: ''
 };

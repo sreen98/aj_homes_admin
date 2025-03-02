@@ -6,6 +6,7 @@ const messages = {
       description: 'Description',
       address: 'Address',
       reference: 'Reference',
+      isFeatured: 'Mark this property as featured',
       postcode: 'Post Code'
     }
   },
@@ -42,7 +43,9 @@ const messages = {
       type: 'Property Type',
       status: 'Property Status',
       ytLink: 'Youtube Link',
-      mapLink: 'Map Link'
+      mapLink: 'Map Link',
+      moveInDate: 'Move In Date',
+      category: 'Category'
     },
     helperText: {
       status: 'Please select  status'

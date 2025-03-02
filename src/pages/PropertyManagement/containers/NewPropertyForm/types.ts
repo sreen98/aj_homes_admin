@@ -1,8 +1,10 @@
+import { Dayjs } from 'dayjs';
+
 export interface IState {
   title: string;
   reference: string;
   postcode: string;
-  description: string;
+  description: any;
   address: string;
   area: number;
   floor: number;
@@ -22,5 +24,8 @@ export interface IState {
   ytLink: string;
   mapLink: string;
   images: string[];
-  [key: string]: string | number | string[];
+  isFeatured: boolean;
+  moveInDate: Dayjs | null;
+  category: string;
+  [key: string]: string | number | boolean | Dayjs | null | string[] | any;
 }

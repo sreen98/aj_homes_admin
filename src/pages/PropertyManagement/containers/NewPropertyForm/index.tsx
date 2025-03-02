@@ -1,17 +1,37 @@
-import { useState } from 'react';
-import { Grid, Card, CardHeader, CardContent, Divider, Button } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Card, CardHeader, CardContent, Divider, Button, Checkbox } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import messages from './messages';
-import { IState } from './types';
-import { contractOptions, payableOptions, statusOptions } from 'config';
-import { createProperty, uploadImage } from 'pages/PropertyManagement/slice';
-import { useDispatch } from 'react-redux';
+import Grid from '@mui/material/Grid2';
+import { categoryOptions, contractOptions, payableOptions, statusOptions } from 'config';
+import { createProperty, getPropertyDetails, updateProperty, uploadImage } from 'pages/PropertyManagement/slice';
+import { useDispatch, useSelector } from 'react-redux';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MUIRichTextEditor from 'mui-rte';
 import { stateToHTML } from 'draft-js-export-html';
+import { DatePicker } from '@mui/x-date-pickers';
+import { bathBedOptions, DATE_FORMAT } from 'utils/constants';
+import { createStructuredSelector } from 'reselect';
+import ReactHtmlParser from 'react-html-parser';
+import { convertToRaw, ContentState, convertFromHTML } from 'draft-js';
+import dayjs from 'dayjs';
+
+import messages from './messages';
+import { IState } from './types';
+import * as Selectors from '../../selectors';
+
+const editorStyles = {
+  width: '77rem',
+  height: '500px',
+  border: '1px solid #ccc',
+  borderRadius: '5px',
+  paddingLeft: '20px',
+  marginLeft: '10px',
+  overflow: 'auto',
+  marginBottom: '20px'
+};
 
 const initialState = {
   title: '',
@@ -36,15 +56,74 @@ const initialState = {
   status: '',
   ytLink: '',
   mapLink: '',
-  images: []
+  images: [],
+  isFeatured: false,
+  moveInDate: null,
+  category: ''
 };
-const bathBedOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const stateSelector = createStructuredSelector({
+  property: Selectors.makeSelectPropertyData()
+});
 
-function NewPropertyForm() {
+export function htmlToRTE(html: any) {
+  const contentHTML = convertFromHTML(html || '');
+  const contentState = ContentState.createFromBlockArray(contentHTML.contentBlocks, contentHTML.entityMap);
+  return JSON.stringify(convertToRaw(contentState));
+}
+function NewPropertyForm({ propId }: Readonly<{ propId: string }>) {
+  const { property }: any = useSelector(stateSelector);
+  const dispatch = useDispatch();
+
   const [state, setState] = useState<IState>(initialState);
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const dispatch = useDispatch();
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, id: 'payable' | 'status' | 'furnishingType') => {
+
+  useEffect(() => {
+    if (propId) dispatch(getPropertyDetails({ propId }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propId]);
+
+  useEffect(() => {
+    if (propId && property?._id) {
+      const updatedProperty = {
+        title: property.title,
+        reference: property.reference,
+        postcode: property.postcode,
+        description: property.description || '',
+        address: property.address,
+        area: property.area,
+        floor: property.floor,
+        bathroom: property.bathroom,
+        bedroom: property.bedroom,
+        tenure: property.tenure,
+        furnishingType: property.furnishingType,
+        lettingType: property.lettingType,
+        minTerm: property.minTerm,
+        contractLength: property.contractLength,
+        deposit: property.deposit,
+        currency: property.currency,
+        price: property.price,
+        payable: property.payable,
+        type: property.type,
+        status: property.status,
+        ytLink: property.ytLink,
+        mapLink: property.mapLink,
+        images: property.images,
+        isFeatured: property.isFeatured,
+        moveInDate: dayjs(property.moveInDate),
+        category: property.category
+      };
+      setState(updatedProperty);
+    }
+    return () => {
+      setState(initialState);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [property]);
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    id: 'payable' | 'status' | 'furnishingType' | 'category'
+  ) => {
     setState({ ...state, [id]: event.target.value });
   };
   const [hoveredIndex, setHoveredIndex] = useState<null | number>(null);
@@ -55,7 +134,7 @@ function NewPropertyForm() {
   };
 
   const handleValidation = () => {
-    const requiredFields = ['title', 'postcode', 'description', 'price', 'payable', 'status', 'currency'];
+    const requiredFields = ['title', 'postcode', 'description', 'price', 'payable', 'status', 'currency', 'category'];
     let isPass = true;
     requiredFields.forEach(item => {
       if (state[item] === '') {
@@ -93,14 +172,15 @@ function NewPropertyForm() {
   const handleSubmit = () => {
     const isValidForm = handleValidation();
     if (isValidForm) {
-      dispatch(createProperty(state));
+      if (propId) dispatch(updateProperty({ id: propId, state }));
+      else dispatch(createProperty(state));
     }
   };
 
   return (
     <Grid container direction="row" justifyContent="center" alignItems="stretch" spacing={3}>
       {/* Basic Info */}
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Card>
           <CardHeader title={messages.basicInfo.title} />
           <Divider />
@@ -116,36 +196,40 @@ function NewPropertyForm() {
             >
               <TextField
                 required
-                id="outlined-required"
+                id="outlined-title"
                 label={messages.basicInfo.label.title}
                 value={state.title}
                 onChange={e => setState({ ...state, title: e.target.value })}
+                size="small"
               />
               <TextField
-                id="outlined-required"
+                id="outlined-reference"
                 label={messages.basicInfo.label.reference}
                 value={state.reference}
                 onChange={e => setState({ ...state, reference: e.target.value })}
+                size="small"
               />
               <TextField
                 required
-                id="outlined-required"
+                id="outlined-postcode"
                 label={messages.basicInfo.label.postcode}
                 value={state.postcode}
                 onChange={e => setState({ ...state, postcode: e.target.value })}
+                size="small"
               />
               <TextField
                 required
                 multiline
                 fullWidth
-                id="outlined-textarea"
+                id="outlined-address"
                 label={messages.basicInfo.label.address}
                 value={state.address}
                 onChange={e => setState({ ...state, address: e.target.value })}
+                size="small"
               />
-
+              {propId && <div style={editorStyles}>{ReactHtmlParser(property?.description)}</div>}
               <MUIRichTextEditor
-                label="Description"
+                label={propId ? '' : messages.basicInfo.label.description}
                 onChange={value => handelOnChangeRTE(value)}
                 controls={[
                   'bold',
@@ -161,11 +245,30 @@ function NewPropertyForm() {
                 ]}
               />
             </Box>
+            {/* <FormControlLabel
+              sx={{ paddingLeft: '10px' }}
+              control={
+                <Switch
+                  checked={state.isFeatured}
+                  onChange={e => setState({ ...state, isFeatured: e.target.checked })}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                  color="error"
+                />
+              }
+              label={messages.basicInfo.label.isFeatured}
+            /> */}
+            <Checkbox
+              checked={state.isFeatured}
+              onChange={e => setState({ ...state, isFeatured: e.target.checked })}
+              size="small"
+              sx={{ paddingTop: '10px' }}
+            />
+            {messages.basicInfo.label.isFeatured}
           </CardContent>
         </Card>
       </Grid>
       {/* Property Info */}
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Card>
           <CardHeader title={messages.propInfo.title} />
           <Divider />
@@ -180,6 +283,7 @@ function NewPropertyForm() {
               autoComplete="off"
             >
               <TextField
+                size="small"
                 type="number"
                 id="outlined-required"
                 label={messages.propInfo.label.area}
@@ -187,6 +291,7 @@ function NewPropertyForm() {
                 onChange={e => setState({ ...state, area: Number(e.target.value) > 0 ? Number(e.target.value) : 0 })}
               />
               <TextField
+                size="small"
                 id="outlined-required"
                 type="number"
                 label={messages.propInfo.label.floor}
@@ -194,6 +299,7 @@ function NewPropertyForm() {
                 onChange={e => setState({ ...state, floor: Number(e.target.value) > 0 ? Number(e.target.value) : 0 })}
               />
               <TextField
+                size="small"
                 id=""
                 select
                 label={messages.propInfo.label.bathroom}
@@ -205,6 +311,7 @@ function NewPropertyForm() {
                 ))}
               </TextField>
               <TextField
+                size="small"
                 id=""
                 select
                 label={messages.propInfo.label.bedroom}
@@ -216,6 +323,7 @@ function NewPropertyForm() {
                 ))}
               </TextField>
               <TextField
+                size="small"
                 id="outlined-required"
                 label={messages.propInfo.label.tenure}
                 value={state.tenure}
@@ -226,7 +334,7 @@ function NewPropertyForm() {
         </Card>
       </Grid>
       {/* Contract Info */}
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Card>
           <CardHeader title={messages.contractInfo.title} />
           <Divider />
@@ -241,6 +349,7 @@ function NewPropertyForm() {
               autoComplete="off"
             >
               <TextField
+                size="small"
                 id="outlined-select-payable"
                 select
                 label={messages.contractInfo.label.furnishingType}
@@ -254,24 +363,28 @@ function NewPropertyForm() {
                 ))}
               </TextField>
               <TextField
+                size="small"
                 id="outlined-required"
                 label={messages.contractInfo.label.lettingType}
                 value={state.lettingType}
                 onChange={e => setState({ ...state, lettingType: e.target.value })}
               />
               <TextField
+                size="small"
                 id="outlined-required"
                 label={messages.contractInfo.label.minTerm}
                 value={state.minTerm}
                 onChange={e => setState({ ...state, minTerm: e.target.value })}
               />
               <TextField
+                size="small"
                 id="outlined-required"
                 label={messages.contractInfo.label.contractLength}
                 value={state.contractLength}
                 onChange={e => setState({ ...state, contractLength: e.target.value })}
               />
               <TextField
+                size="small"
                 id="outlined-required"
                 label={messages.contractInfo.label.deposit}
                 value={state.deposit}
@@ -284,7 +397,7 @@ function NewPropertyForm() {
         </Card>
       </Grid>
       {/* More Details */}
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Card>
           <CardHeader title={messages.moreDetails.title} />
           <Divider />
@@ -299,6 +412,7 @@ function NewPropertyForm() {
               autoComplete="off"
             >
               <TextField
+                size="small"
                 required
                 id="outlined-required"
                 disabled
@@ -307,6 +421,7 @@ function NewPropertyForm() {
                 onChange={e => setState({ ...state, currency: e.target.value })}
               />
               <TextField
+                size="small"
                 required
                 id="outlined-required"
                 label={messages.moreDetails.label.price}
@@ -314,6 +429,7 @@ function NewPropertyForm() {
                 onChange={e => setState({ ...state, price: Number(e.target.value) })}
               />
               <TextField
+                size="small"
                 id="outlined-select-payable"
                 required
                 select
@@ -328,12 +444,14 @@ function NewPropertyForm() {
                 ))}
               </TextField>
               <TextField
+                size="small"
                 id="outlined-required"
                 label={messages.moreDetails.label.type}
                 value={state.type}
                 onChange={e => setState({ ...state, type: e.target.value })}
               />
               <TextField
+                size="small"
                 id="outlined-select-statu"
                 required
                 select
@@ -348,56 +466,115 @@ function NewPropertyForm() {
                 ))}
               </TextField>
               <TextField
+                size="small"
                 id="outlined-required"
                 label={messages.moreDetails.label.ytLink}
                 value={state.ytLink}
                 onChange={e => setState({ ...state, ytLink: e.target.value })}
               />
               <TextField
+                size="small"
                 id="outlined-required"
                 label={messages.moreDetails.label.mapLink}
                 value={state.mapLink}
                 onChange={e => setState({ ...state, mapLink: e.target.value })}
               />
+
+              <TextField
+                id="outlined-select-category"
+                size="small"
+                select
+                required
+                label={messages.moreDetails.label.category}
+                value={state.category}
+                onChange={e => handleChange(e as React.ChangeEvent<HTMLInputElement>, 'category')}
+              >
+                {categoryOptions.map(option => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <DatePicker
+                label={messages.moreDetails.label.moveInDate}
+                onChange={newValue => setState({ ...state, moveInDate: newValue })}
+                value={state.moveInDate}
+                slotProps={{
+                  field: { clearable: true, onClear: () => setState({ ...state, moveInDate: null }) }
+                }}
+                format={DATE_FORMAT}
+              />
             </Box>
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={12} mb={6}>
+      {/* Image Upload */}
+      <Grid size={{ xs: 12 }}>
         <Card>
           <CardHeader title={messages.imageUpload.title} />
           <Divider />
           <Grid container spacing={3} sx={{ margin: '2rem', width: '100%', height: '100%' }}>
-            {selectedFiles?.map((file, index) => (
-              <Grid item xs={4} key={index}>
-                <div
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                >
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`Preview ${index + 1}`}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                  {hoveredIndex === index && (
+            {!propId
+              ? selectedFiles?.map((file, index) => (
+                  <Grid size={{ xs: 4 }} key={index}>
                     <div
-                      style={{
-                        position: 'absolute',
-                        height: '30px',
-                        width: '30px',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        background: 'rgba(0, 0, 0, 0.5)'
-                      }}
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
+                      onMouseEnter={() => setHoveredIndex(index)}
+                      onMouseLeave={() => setHoveredIndex(null)}
                     >
-                      <DeleteIcon style={{ color: 'white' }} onClick={() => handleRemoveImage(index)} />
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={`Preview ${index + 1}`}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                      {hoveredIndex === index && (
+                        <div
+                          style={{
+                            position: 'absolute',
+                            height: '30px',
+                            width: '30px',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            background: 'rgba(0, 0, 0, 0.5)'
+                          }}
+                        >
+                          <DeleteIcon style={{ color: 'white' }} onClick={() => handleRemoveImage(index)} />
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </Grid>
-            ))}
+                  </Grid>
+                ))
+              : state.images?.map((imageUrl, index) => (
+                  <Grid size={{ xs: 4 }} key={index}>
+                    <div
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
+                      onMouseEnter={() => setHoveredIndex(index)}
+                      onMouseLeave={() => setHoveredIndex(null)}
+                    >
+                      <img
+                        src={imageUrl}
+                        alt={`Preview ${index + 1}`}
+                        style={{ width: '300px', height: '200px', objectFit: 'fill' }}
+                      />
+                      {hoveredIndex === index && (
+                        <div
+                          style={{
+                            position: 'absolute',
+                            height: '30px',
+                            width: '30px',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            background: 'rgba(0, 0, 0, 0.5)'
+                          }}
+                        >
+                          <DeleteIcon style={{ color: 'white' }} onClick={() => handleRemoveImage(index)} />
+                        </div>
+                      )}
+                    </div>
+                  </Grid>
+                ))}
           </Grid>
           <CardContent>
             <Box
@@ -424,7 +601,8 @@ function NewPropertyForm() {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={2} sx={{ alignContent: 'center', display: 'flex', justifyContent: 'center' }}>
+      {/* Submit Button */}
+      <Grid size={{ xs: 12 }} sx={{ alignContent: 'center', display: 'flex', justifyContent: 'center' }}>
         <Button onClick={handleSubmit} variant="contained" color="primary" size="large">
           {messages.button.submit}
         </Button>

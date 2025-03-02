@@ -1,6 +1,6 @@
 const messages = {
   edit: 'Edit',
-  details: 'Details',
+  featured: 'Featured',
   updateStatus: 'Update Status'
 };
 

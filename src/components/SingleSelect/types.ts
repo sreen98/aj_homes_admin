@@ -1,6 +1,6 @@
 import { SelectProps } from '@mui/material';
 
-export interface SingleSelectProps extends SelectProps {
+export interface SingleSelectProps extends Omit<SelectProps, 'someProperty'> {
   control: any;
   label: string;
   placeholder: string;

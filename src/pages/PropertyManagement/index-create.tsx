@@ -8,6 +8,7 @@ import { createStructuredSelector } from 'reselect';
 import * as Selectors from './selectors';
 import { useSelector } from 'react-redux';
 import { LoadingIndicator } from 'components';
+import { useParams } from 'react-router-dom';
 
 const stateSelector = createStructuredSelector({
   loading: Selectors.makeSelectPropertiesLoading()
@@ -15,12 +16,13 @@ const stateSelector = createStructuredSelector({
 
 export default function PropertyCreateManagement() {
   const { loading }: any = useSelector(stateSelector);
+  const { propId }: any = useParams();
 
   return (
     <Container maxWidth="xl" sx={{ marginBottom: '2rem' }}>
       <PageTitle heading={messages.new.heading} showBack />
       {loading && <LoadingIndicator visible={loading} />}
-      <NewPropertyForm></NewPropertyForm>
+      <NewPropertyForm propId={propId}></NewPropertyForm>
     </Container>
   );
 }

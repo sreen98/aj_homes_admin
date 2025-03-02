@@ -23,14 +23,13 @@ function MultiSelect({
       name={name}
       control={control}
       render={({ field }) => (
-        <FormControl>
+        <FormControl variant={variant}>
           <FormLabel id={id} className="font-semibold mb-6">
             {label}
           </FormLabel>
           <Select
             {...field}
             displayEmpty
-            variant={variant}
             multiple
             labelId={id}
             required

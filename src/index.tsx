@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import React from 'react';
 import { ConnectedRouter } from 'connected-react-router';
 import { withRouter } from 'react-router-dom';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { store } from 'store/store';
 import { history } from 'utils';
 
@@ -31,10 +33,12 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <CssBaseline />
-      <ScrollToTopHandler>
-        <AppManagement />
-      </ScrollToTopHandler>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <CssBaseline />
+        <ScrollToTopHandler>
+          <AppManagement />
+        </ScrollToTopHandler>
+      </LocalizationProvider>
     </ConnectedRouter>
   </Provider>
 );

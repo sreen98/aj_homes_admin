@@ -17,7 +17,3 @@ export const PropertyViewManagement = loadable(() => import('./index-view'), {
 export const PropertyCreateManagement = loadable(() => import('./index-create'), {
   fallback: <LoadingIndicator visible />
 });
-
-export const PropertyEditManagement = loadable(() => import('./index-edit'), {
-  fallback: <LoadingIndicator visible />
-});

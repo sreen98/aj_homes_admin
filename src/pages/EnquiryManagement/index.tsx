@@ -51,13 +51,11 @@ export default function PropertyManagement() {
     }
   };
   return (
-    <>
-      <Container maxWidth="xl" sx={{ marginBottom: '2rem' }}>
-        {showModal && <EnquiryViewModal onClose={() => setShowModal(false)} open={showModal} enquiry={enquiry} />}
-        {loading && <LoadingIndicator visible={loading} />}
-        <PageTitle heading={messages.heading} />
-        <EnquiryTable enquiries={enquiries} onFilterChange={handleFilterChange} onAction={handleTableAction} />
-      </Container>
-    </>
+    <Container maxWidth="xl" sx={{ marginBottom: '2rem' }}>
+      {showModal && <EnquiryViewModal onClose={() => setShowModal(false)} open={showModal} enquiry={enquiry} />}
+      {loading && <LoadingIndicator visible={loading} />}
+      <PageTitle heading={messages.heading} />
+      <EnquiryTable enquiries={enquiries} onFilterChange={handleFilterChange} onAction={handleTableAction} />
+    </Container>
   );
 }
