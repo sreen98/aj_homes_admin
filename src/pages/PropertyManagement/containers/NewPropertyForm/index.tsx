@@ -21,6 +21,7 @@ import dayjs from 'dayjs';
 import messages from './messages';
 import { IState } from './types';
 import * as Selectors from '../../selectors';
+import { showStatusMessage } from 'pages/AppManagement/slice';
 
 const editorStyles = {
   width: '77rem',
@@ -59,7 +60,8 @@ const initialState = {
   images: [],
   isFeatured: false,
   moveInDate: null,
-  category: ''
+  category: '',
+  priceDesc: ''
 };
 const stateSelector = createStructuredSelector({
   property: Selectors.makeSelectPropertyData()
@@ -110,7 +112,8 @@ function NewPropertyForm({ propId }: Readonly<{ propId: string }>) {
         images: property.images,
         isFeatured: property.isFeatured,
         moveInDate: dayjs(property.moveInDate),
-        category: property.category
+        category: property.category,
+        priceDesc: property.priceDesc
       };
       setState(updatedProperty);
     }
@@ -141,6 +144,7 @@ function NewPropertyForm({ propId }: Readonly<{ propId: string }>) {
         isPass = false;
       }
     });
+    if (!isPass) dispatch(showStatusMessage({ type: 'error', message: 'Please fill all required fields' }));
     return isPass;
   };
 
@@ -427,6 +431,13 @@ function NewPropertyForm({ propId }: Readonly<{ propId: string }>) {
                 label={messages.moreDetails.label.price}
                 value={state.price}
                 onChange={e => setState({ ...state, price: Number(e.target.value) })}
+              />
+              <TextField
+                id="outlined-title"
+                label={messages.moreDetails.label.priceDescription}
+                value={state.priceDesc}
+                onChange={e => setState({ ...state, priceDesc: e.target.value })}
+                size="small"
               />
               <TextField
                 size="small"

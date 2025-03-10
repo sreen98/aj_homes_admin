@@ -39,6 +39,7 @@ const messages = {
     label: {
       currency: 'Currency',
       price: 'Price in Pounds',
+      priceDescription: 'Price Description',
       payable: 'Payable',
       type: 'Property Type',
       status: 'Property Status',

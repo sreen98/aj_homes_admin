@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, CardContent, Grid } from '@mui/material';
+import { Card, CardContent, Grid, Tooltip } from '@mui/material';
 
 import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
@@ -40,9 +40,22 @@ const PropertyCard = ({ properties, onOpenModal }: IPropertyCardProps) => {
               />
               <CardContent sx={{ maxHeight: 150, cursor: 'pointer' }} onClick={() => handleClickDetails(item._id)}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {getTitle({ title: item.title, status: item.status })}
-                  </Typography>
+                  <Tooltip title={getTitle({ title: item.title, status: item.status })} placement="top">
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      sx={{
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        width: '250px',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      {getTitle({ title: item.title, status: item.status })}
+                    </Typography>
+                  </Tooltip>
+
                   {item.isFeatured && <StarIcon />}
                 </div>
                 <Typography

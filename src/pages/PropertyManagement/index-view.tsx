@@ -270,7 +270,7 @@ const ProductDetailsPage = () => {
           <Paper elevation={3} sx={{ padding: '1rem' }}>
             <Typography sx={{ display: 'flex', alignItems: 'center', padding: '10px' }}>
               <CurrencyPoundIcon fontSize="small" sx={{ marginRight: '0.5rem' }} color="warning" />
-              <strong style={{ paddingRight: '20px' }}>Price :</strong> £ {property?.price}
+              <strong style={{ paddingRight: '20px' }}>Price :</strong> £ {property?.price} {property?.priceDesc ?? ''}
             </Typography>
             <Typography sx={{ display: 'flex', alignItems: 'center', padding: '10px' }}>
               <ReceiptIcon fontSize="small" sx={{ marginRight: '0.5rem' }} color="warning" />
