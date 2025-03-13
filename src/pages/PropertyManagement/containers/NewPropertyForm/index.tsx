@@ -1,38 +1,27 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { categoryOptions, contractOptions, payableOptions, statusOptions } from 'config';
+import dayjs from 'dayjs';
+import { TextEditor } from 'components';
+
 import { Card, CardHeader, CardContent, Divider, Button, Checkbox } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Grid2';
-import { categoryOptions, contractOptions, payableOptions, statusOptions } from 'config';
-import { createProperty, getPropertyDetails, updateProperty, uploadImage } from 'pages/PropertyManagement/slice';
-import { useDispatch, useSelector } from 'react-redux';
+
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
-import MUIRichTextEditor from 'mui-rte';
-import { stateToHTML } from 'draft-js-export-html';
 import { DatePicker } from '@mui/x-date-pickers';
 import { bathBedOptions, DATE_FORMAT } from 'utils/constants';
-import { createStructuredSelector } from 'reselect';
-import ReactHtmlParser from 'react-html-parser';
-import { convertToRaw, ContentState, convertFromHTML } from 'draft-js';
-import dayjs from 'dayjs';
 
+import { showStatusMessage } from 'pages/AppManagement/slice';
+import { createProperty, getPropertyDetails, updateProperty, uploadImage } from 'pages/PropertyManagement/slice';
 import messages from './messages';
 import { IState } from './types';
 import * as Selectors from '../../selectors';
-import { showStatusMessage } from 'pages/AppManagement/slice';
-
-const editorStyles = {
-  width: '77rem',
-  height: '500px',
-  border: '1px solid #ccc',
-  borderRadius: '5px',
-  paddingLeft: '20px',
-  marginLeft: '10px',
-  overflow: 'auto',
-  marginBottom: '20px'
-};
 
 const initialState = {
   title: '',
@@ -67,12 +56,9 @@ const stateSelector = createStructuredSelector({
   property: Selectors.makeSelectPropertyData()
 });
 
-export function htmlToRTE(html: any) {
-  const contentHTML = convertFromHTML(html || '');
-  const contentState = ContentState.createFromBlockArray(contentHTML.contentBlocks, contentHTML.entityMap);
-  return JSON.stringify(convertToRaw(contentState));
-}
-function NewPropertyForm({ propId }: Readonly<{ propId: string }>) {
+function NewPropertyForm() {
+  const { propId }: any = useParams();
+
   const { property }: any = useSelector(stateSelector);
   const dispatch = useDispatch();
 
@@ -80,7 +66,9 @@ function NewPropertyForm({ propId }: Readonly<{ propId: string }>) {
   const [selectedFiles, setSelectedFiles] = useState([]);
 
   useEffect(() => {
-    if (propId) dispatch(getPropertyDetails({ propId }));
+    if (propId) {
+      dispatch(getPropertyDetails({ propId }));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propId]);
 
@@ -130,11 +118,6 @@ function NewPropertyForm({ propId }: Readonly<{ propId: string }>) {
     setState({ ...state, [id]: event.target.value });
   };
   const [hoveredIndex, setHoveredIndex] = useState<null | number>(null);
-
-  const handelOnChangeRTE = (value: any) => {
-    stateToHTML(value.getCurrentContent());
-    setState({ ...state, description: stateToHTML(value.getCurrentContent()) });
-  };
 
   const handleValidation = () => {
     const requiredFields = ['title', 'postcode', 'description', 'price', 'payable', 'status', 'currency', 'category'];
@@ -193,7 +176,7 @@ function NewPropertyForm({ propId }: Readonly<{ propId: string }>) {
               component="form"
               sx={{
                 '& .MuiTextField-root': { m: 1, width: '25rem' },
-                '& .MuiFormControl-fullWidth': { m: 1, width: '77rem' }
+                '& .MuiFormControl-fullWidth': { m: 1, width: '85vw' }
               }}
               noValidate
               autoComplete="off"
@@ -231,36 +214,12 @@ function NewPropertyForm({ propId }: Readonly<{ propId: string }>) {
                 onChange={e => setState({ ...state, address: e.target.value })}
                 size="small"
               />
-              {propId && <div style={editorStyles}>{ReactHtmlParser(property?.description)}</div>}
-              <MUIRichTextEditor
-                label={propId ? '' : messages.basicInfo.label.description}
-                onChange={value => handelOnChangeRTE(value)}
-                controls={[
-                  'bold',
-                  'italic',
-                  'underline',
-                  'link',
-                  'strikethrough',
-                  'undo',
-                  'redo',
-                  'numberList',
-                  'bulletList',
-                  'clear'
-                ]}
+              <TextEditor
+                width="85vw"
+                value={state.description}
+                onChange={value => setState({ ...state, description: value })}
               />
             </Box>
-            {/* <FormControlLabel
-              sx={{ paddingLeft: '10px' }}
-              control={
-                <Switch
-                  checked={state.isFeatured}
-                  onChange={e => setState({ ...state, isFeatured: e.target.checked })}
-                  inputProps={{ 'aria-label': 'controlled' }}
-                  color="error"
-                />
-              }
-              label={messages.basicInfo.label.isFeatured}
-            /> */}
             <Checkbox
               checked={state.isFeatured}
               onChange={e => setState({ ...state, isFeatured: e.target.checked })}
@@ -311,7 +270,9 @@ function NewPropertyForm({ propId }: Readonly<{ propId: string }>) {
                 onChange={e => setState({ ...state, bathroom: Number(e.target.value) })}
               >
                 {bathBedOptions.map(item => (
-                  <MenuItem value={item}>{item}</MenuItem>
+                  <MenuItem value={item} key={item}>
+                    {item}
+                  </MenuItem>
                 ))}
               </TextField>
               <TextField
@@ -323,7 +284,9 @@ function NewPropertyForm({ propId }: Readonly<{ propId: string }>) {
                 onChange={e => setState({ ...state, bedroom: Number(e.target.value) })}
               >
                 {bathBedOptions.map(item => (
-                  <MenuItem value={item}>{item}</MenuItem>
+                  <MenuItem value={item} key={item}>
+                    {item}
+                  </MenuItem>
                 ))}
               </TextField>
               <TextField

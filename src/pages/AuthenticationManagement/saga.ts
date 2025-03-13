@@ -1,7 +1,7 @@
 import { SagaIterator } from '@redux-saga/core';
 import { all, takeLatest, put, call } from 'redux-saga/effects';
 import * as Endpoints from './endpoints';
-import { errorHandlerSaga, localRedirect, statusHandlerSaga } from 'utils';
+import { errorHandlerSaga, getEncodedQueryParams, localRedirect, statusHandlerSaga } from 'utils';
 
 import * as Actions from './slice';
 import { RequestSagaParams } from 'types';
@@ -9,7 +9,8 @@ import { RequestSagaParams } from 'types';
 export function* loginUser(data: RequestSagaParams) {
   try {
     const response: { data: { token: string } } = yield call(Endpoints.loginUser, data.payload);
-    yield call(localRedirect, '/admin/properties');
+    const search = getEncodedQueryParams({ category: 'all' });
+    yield call(localRedirect, '/admin/properties', { search });
     localStorage.setItem('accessToken', response.data.token);
     yield put(Actions.loginUserSuccess());
     yield call(statusHandlerSaga, { message: 'Successfully Logged In!' });

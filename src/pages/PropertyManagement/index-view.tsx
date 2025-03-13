@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Grid, Typography, Paper, Button, Divider, Card, Link } from '@mui/material';
+import { Container, Grid, Typography, Paper, Button, Divider, Card, Link, Toolbar, Tooltip } from '@mui/material';
 import PageTitle from 'components/PageTitle';
 import {
   Bathtub as BathtubIcon,
@@ -184,17 +184,27 @@ const ProductDetailsPage = () => {
                       gap: '10px'
                     }}
                   >
-                    <LocationOnIcon
-                      sx={{ cursor: 'pointer' }}
-                      fontSize="small"
-                      onClick={() => window.open(property?.mapLink)}
-                    />
-                    <EditIcon
-                      onClick={() => localRedirect(`/admin/properties/new/${propId}`)}
-                      fontSize="small"
-                      sx={{ cursor: 'pointer' }}
-                    />
-                    <DeleteIcon onClick={() => setShowDeleteModal(true)} fontSize="small" sx={{ cursor: 'pointer' }} />
+                    <Tooltip title="View on Map" placement="top">
+                      <LocationOnIcon
+                        sx={{ cursor: 'pointer' }}
+                        fontSize="small"
+                        onClick={() => window.open(property?.mapLink)}
+                      />
+                    </Tooltip>
+                    <Tooltip title="Edit Property" placement="top">
+                      <EditIcon
+                        onClick={() => localRedirect(`/admin/properties/new/${propId}`)}
+                        fontSize="small"
+                        sx={{ cursor: 'pointer' }}
+                      />
+                    </Tooltip>
+                    <Tooltip title="Delete Property" placement="top">
+                      <DeleteIcon
+                        onClick={() => setShowDeleteModal(true)}
+                        fontSize="small"
+                        sx={{ cursor: 'pointer' }}
+                      />
+                    </Tooltip>
                   </div>
                 </Grid>
               </Grid>

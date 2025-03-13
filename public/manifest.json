@@ -1,6 +1,6 @@
 {
-  "short_name": "Blinklink",
-  "name": "Blinklink Web app",
+  "short_name": "AJHomes Admin",
+  "name": "AJHomes Admin Web app",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
