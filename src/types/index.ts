@@ -11,6 +11,12 @@ export declare interface SVGComponentProps extends React.SVGProps<SVGSVGElement>
   title?: string;
 }
 
+export interface ISideBarListItem {
+  id: string;
+  name: string;
+  subList?: { id: string; name: string }[];
+}
+
 export interface IObject {
   [key: string]: string;
 }
@@ -83,6 +89,9 @@ export interface IProperty {
   status: string;
   ytLink: string;
   mapLink: string;
+  isFeatured: boolean;
+  moveInDate: string | null;
+  category: string;
 }
 
 export interface ITableHeader {

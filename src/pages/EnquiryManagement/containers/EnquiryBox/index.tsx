@@ -144,6 +144,7 @@ const EnquiryTable: FC<EnquiryTableProps> = ({ enquiries, onFilterChange, onActi
               id="outlined-select-status"
               required
               select
+              size="small"
               label={messages.label.status}
               value={status}
               onChange={e => handleStatusChange(e as React.ChangeEvent<HTMLInputElement>)}

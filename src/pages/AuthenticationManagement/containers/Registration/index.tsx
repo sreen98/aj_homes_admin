@@ -4,13 +4,13 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Copyright } from 'components';
 import messages from './messages';
+import Grid from '@mui/material/Grid2';
 
 export default function Registration() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -36,7 +36,7 @@ export default function Registration() {
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 autoComplete="given-name"
                 name="firstName"
@@ -47,7 +47,7 @@ export default function Registration() {
                 autoFocus
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 required
                 fullWidth
@@ -57,10 +57,10 @@ export default function Registration() {
                 autoComplete="family-name"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField required fullWidth id="email" label={messages.label.email} name="email" autoComplete="email" />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 required
                 fullWidth
@@ -76,7 +76,7 @@ export default function Registration() {
             {messages.signUp}
           </Button>
           <Grid container justifyContent="flex-end">
-            <Grid item>
+            <Grid>
               <Link href="#" variant="body2">
                 {messages.alreadyHaveAccount}
               </Link>

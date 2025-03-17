@@ -14,7 +14,7 @@ const propertySlice = createSlice({
   name: 'propertyManagement',
   initialState,
   reducers: {
-    getAllProperties: state => {
+    getAllProperties: (state, action: PayloadAction<{ category: string }>) => {
       state.loading = true;
       state.error = '';
     },
@@ -62,7 +62,7 @@ const propertySlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    updateStatus: (state, action: PayloadAction<{ id: string; status: string }>) => {
+    updateStatus: (state, action: PayloadAction<{ id: string; status: string; category: string }>) => {
       state.loading = true;
       state.error = '';
     },
@@ -74,7 +74,7 @@ const propertySlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    getPropertyDetails: state => {
+    getPropertyDetails: (state, action: PayloadAction<{ propId: string }>) => {
       state.loading = true;
       state.error = '';
     },
@@ -83,6 +83,18 @@ const propertySlice = createSlice({
       state.property = action.payload;
     },
     getPropertyDetailsFailed: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    deleteProperty: (state, action: PayloadAction<{ id: string }>) => {
+      state.loading = true;
+      state.error = '';
+    },
+    deletePropertySuccess: state => {
+      state.loading = false;
+      state.error = '';
+    },
+    deletePropertyFailed: (state, action: PayloadAction<any>) => {
       state.loading = false;
       state.error = action.payload;
     }
@@ -107,7 +119,10 @@ export const {
   uploadImageFailed,
   updateStatus,
   updateStatusSuccess,
-  updateStatusFailed
+  updateStatusFailed,
+  deleteProperty,
+  deletePropertySuccess,
+  deletePropertyFailed
 } = propertySlice.actions;
 
 export default propertySlice.reducer;

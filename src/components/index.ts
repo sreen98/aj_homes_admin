@@ -11,6 +11,8 @@ import Drawer from './Drawer';
 import Alert from './Alert';
 import UpdateStatusModal from './UpdateStatusModal';
 import EnquiryViewModal from './EnquiryViewModal';
+import ConfirmationModal from './ConfirmationModal';
+import TextEditor from './TextEditor';
 export {
   LoadingIndicator,
   MultiSelect,
@@ -24,5 +26,7 @@ export {
   Drawer,
   Alert,
   UpdateStatusModal,
-  EnquiryViewModal
+  EnquiryViewModal,
+  ConfirmationModal,
+  TextEditor
 };

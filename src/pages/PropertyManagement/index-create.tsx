@@ -20,7 +20,7 @@ export default function PropertyCreateManagement() {
     <Container maxWidth="xl" sx={{ marginBottom: '2rem' }}>
       <PageTitle heading={messages.new.heading} showBack />
       {loading && <LoadingIndicator visible={loading} />}
-      <NewPropertyForm></NewPropertyForm>
+      <NewPropertyForm />
     </Container>
   );
 }
