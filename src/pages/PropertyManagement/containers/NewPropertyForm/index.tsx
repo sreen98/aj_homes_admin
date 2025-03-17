@@ -217,7 +217,9 @@ function NewPropertyForm() {
               <TextEditor
                 width="85vw"
                 value={state.description}
-                onChange={value => setState({ ...state, description: value })}
+                onChange={(value: string) => {
+                  setState(prev => ({ ...prev, description: value }));
+                }}
               />
             </Box>
             <Checkbox
